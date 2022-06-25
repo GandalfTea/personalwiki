@@ -9,7 +9,7 @@ body {
 	background-color: #f0f0f0;
 }
 
-h1, h2, h3, h4, h5, h6, p, a, textarea, input {
+h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	font-family: "Helvetica";
 }
 
@@ -56,36 +56,42 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input {
 
 .cell {
 	width: 80%;
-	min-height: 15vh;
+	min-height: 12vh;
 	height: auto;
 	margin: auto;
 	margin-top: 1vh;
 	position: relative;
-}
-
-.cell textarea {
 	background-color: #f8f8f8;
-	resize: none;
-	height: 100%;
-	min-height: 15vh;
-	width: 100%;
-	border: none;
-	outline: none;
 	padding: 20px 20px;
 	transition: 0.2s;
+
+	font-size: 12px;
 }
 
-.cell textarea:hover {
-	background-color: #f0f0f0;
+.cell:hover {
+	background-color: #eee;
 }
 
-.cell textarea:focus {
+.cell:focus {
 	background-color: white;
 	border: 1px solid black;
 	border-radius: 5px;
 	transition: 0.2s;
 }
 
+.add-cell-button {
+	width: 40px;
+	height: 40px;
+	margin: auto;
+	margin-top: 3vh;
+	margin-bottom: 3vh;
+	border-radius: 50px;
+	background-color: #eee;
+}
+
+.add-cell-button:hover {
+	background-color: #ccc;
+}
 
 .last-edit {
 	color: #888;

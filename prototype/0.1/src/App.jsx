@@ -19,16 +19,25 @@ const PageHeader = (props) => {
 class App extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = { cells: 1 }
+	}
+
+	add_cell() { 
+		this.setState({ cells: this.state.cells + 1 });
 	}
 
 	render() {
+
+		var cells = [];
+		for( let i=0; i<this.state.cells; i++) {
+			cells.push( <Cell key={i}/> );
+		}
+
 		return(
 			<div className="page">
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title="Vector Arithmetic" />
-				<Cell />
-				<Cell />
-				<Cell />
-				<div class="add-cell"> 
+				{cells}
+				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<img src="" alt="" />
 				</div>
 				<p class="last-edit">Last Update: 2 March 2022</p>
