@@ -20,7 +20,7 @@ class Cell extends React.Component {
 			// Cell is focused.
 			// On blur, copy the text to state to render
 			return(
-				<div className='cell' contentEditable tabIndex='0' ref={this.cell_text} 
+				<div className='cell cell-selected' contentEditable tabIndex='0' ref={this.cell_text} 
 							onBlur={ () => {
 										this.setState({focused: false})
 

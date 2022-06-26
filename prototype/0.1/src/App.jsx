@@ -16,7 +16,7 @@ const PageHeader = (props) => {
 	)
 }
 
-class App extends React.Component {
+class File extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { cells: 1 }
@@ -24,6 +24,33 @@ class App extends React.Component {
 
 	add_cell() { 
 		this.setState({ cells: this.state.cells + 1 });
+		this.save();
+	}
+
+				
+	// Write to disk
+	save() {
+
+		var cells = document.getElementsByClassName('cell');
+		var date = new Date();
+		var bits = {
+			"cells": [],
+			"date": date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear()
+							+ '@' + date.getHours() + ':' + date.getMinutes()
+		}
+
+		for( var i = 0; i < cells.length; i++ ) {
+			var cell = {
+				data: cells[i].innerText,
+				metadata: {
+					type: "Markdown"
+				}
+			}
+
+			bits['cells'][i] = cell;
+		}
+		var json = JSON.stringify(bits);
+
 	}
 
 	render() {
@@ -50,5 +77,5 @@ const root = ReactDOM.createRoot(
 	document.getElementById('root')
 );
 
-root.render( <App /> );
+root.render( <File /> );
 
