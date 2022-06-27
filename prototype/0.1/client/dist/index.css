@@ -92,6 +92,9 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	background-color: #eee;
 }
 
+.cell-input {
+	white-space: pre-line;
+}
 
 /*	BUTTON AND LAST EDIT	*/
 
