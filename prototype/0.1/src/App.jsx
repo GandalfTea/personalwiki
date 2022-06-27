@@ -21,6 +21,7 @@ class File extends React.Component {
 		super(props);
 
 		const INITIAL_CELLS = 2;
+		var EDITED = false;
 
 		this.state = { cells: INITIAL_CELLS, selected: false }
 
@@ -98,7 +99,8 @@ class File extends React.Component {
 
 
 
-	// FUNCTIONS PASSED DOWN TO CELL CHILD COMPONENTS
+	/* FUNCTIONS PASSED DOWN TO CELL CHILD COMPONENTS
+	 *****************************************************************/
 
 	update_ledger( idx, data ) {
 		this.ledger[idx] = data;
@@ -109,6 +111,15 @@ class File extends React.Component {
 		this.selected[idx] = true;
 	}
 
+	/* Helpers
+	 **********/
+
+	get_date() {
+		var date = new Date();
+		const new_date =  date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear()
+						           + '@' + date.getHours() + ':' + date.getMinutes()
+		return new_date;
+	}
 
 
 	/* CELL CONTROL AND DUMP TO DISK
@@ -161,8 +172,8 @@ class File extends React.Component {
 		return(
 			<div className="page">
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title="Vector Arithmetic" />
-				<p class="last-edit">Last Update: 2 March 2022</p>
 				{cells}
+				<p class="last-edit">{"Last Update: " + this.get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<img src="" alt="" />
 				</div>
