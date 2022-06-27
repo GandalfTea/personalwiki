@@ -33,31 +33,58 @@ class File extends React.Component {
 		this.selected = {};
 		for( var i=0; i < INITIAL_CELLS; i++) this.selected[i] = false;
 		this.alert_selected = this.alert_selected.bind(this);
+		const unselect_callback = this.watch_unselect.bind(this); // for event listener
 	}
 
 
-	// Watch for UNSELECT if any cell is selected.
-	watch_unselect() {
+	/* CELL SELECTION
+	 ********************************************************************/
 
-		// Unselect IF: the user clicks on anything other than an unselected cell 
-		var selected = this.selected;
-		var b_set_selected_false = false;
-		window.onclick = function(e) {
-			const name = e.target.className.split(' ');
-			if(name[0] == 'cell') {
-				if( selected[ e.target.dataset.id] ) {
-					// Deselect all cells
-					for( var i=0; i < Object.keys(selected).length; i++) {
-						console.log("ACTION : DESELECTING ALL")
-						b_set_selected_false = true;
-						selected[toString(i)] = false;
-					}
-				}
-				selected[ toString(e.target.dataset.id) ] = true;
+	watch_unselect() {
+		// Unselect if the user clicks on anything other than an unselected cell 
+		window.addEventListener('click', this.unselect_callback, false);
+	}
+
+
+	remove_unselected_watch() {
+		window.removeEventListener('click', this.unselect_callback, false);
+	}
+
+
+	watch_func(e) {
+		e.stopPropagation();
+		console.log("ACTION: CLICKED ", e.target.className);
+
+		const name = e.target.className.split(' ');
+		if(name[0] == 'cell') {
+			if( this.cell_is_active(e.target.dataset.id)) {
+				this.deselect_all_cells();
+			} else {
+				this.select_cell( e.target.dataset.id );
 			}
 		}
-		if( b_set_selected_false) this.setState({ selected: false });
-		this.selected = selected;
+	}
+
+
+	deselect_all_cells() {
+		for( var i=0; i < Object.keys(this.selected).length; i++) {
+			this.selected[i] = false;
+		}
+		this.setState({ selected: false });
+	}
+
+	cell_is_active( cell ) {
+		return this.selected[cell];
+	}
+
+	select_cell( cell ) {
+		this.selected[cell] = true;
+	}
+
+
+	// Debug
+	componentDidUpdate() {
+		console.log("RENDER", this.state.selected);
 		console.log(this.selected);
 	}
 	
@@ -70,7 +97,7 @@ class File extends React.Component {
 
 	alert_selected(idx) {
 		this.setState({ selected: true });
-		console.log("CHANGING STATE TO TRUE FOR:", idx);
+		console.log("CAUGHT ALERT FOR:", idx);
 		this.selected[idx] = true;
 	}
 
@@ -118,16 +145,16 @@ class File extends React.Component {
 
 		return(
 			<div className="page">
-				{ (this.state.selected) ? this.watch_unselect() : null }
-				{ (this.state.selected) ? console.log ("WATCHING FOR CLICKS") : null }
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title="Vector Arithmetic" />
 				<p class="last-edit">Last Update: 2 March 2022</p>
 				{cells}
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<img src="" alt="" />
 				</div>
+				{ (this.state.selected) ? this.watch_unselect() : this.remove_unselected_watch() }
+				{ (this.state.selected) ? console.log("SELECTED") : "NOT SELECTED"}
 			</div>
-		)
+		);
 	}
 }
 

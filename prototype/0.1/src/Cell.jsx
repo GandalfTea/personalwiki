@@ -1,7 +1,8 @@
 
 
 // Markdown Cell
-// Bundled inside of the File object
+// Instanciated inside of the File object
+// TODO: This class should deal with the text formatting UI
 
 
 import React from 'react';
