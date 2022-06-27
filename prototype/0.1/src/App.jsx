@@ -32,8 +32,10 @@ class File extends React.Component {
 		// Select and Modify Cells
 		this.selected = {};
 		for( var i=0; i <= INITIAL_CELLS; i++) this.selected[i] = false;
+
 		this.alert_selected = this.alert_selected.bind(this);
 		this.watch_func = this.watch_func.bind(this);
+
 		this.b_watch = false;
 		this.b_initial_skip = true;
 	}
@@ -45,18 +47,14 @@ class File extends React.Component {
 	watch_unselect() {
 		// Unselect if the user clicks on anything other than an unselected cell 
 		if( !this.b_watch ) {
-			console.log("ADD Click Watchdog");
 			window.addEventListener('click', this.watch_func, false);
 			this.b_watch = true;
-		} else {
-			console.log("Alert : Watchdog already exists");
-		}
+		} 
 	}
 
 
 	remove_unselected_watch() {
 		if( this.b_watch) {
-			console.log("REMOVE Click Watchdog");
 			window.removeEventListener('click', this.watch_func, false);
 			this.b_watch = false;
 			this.b_initial_skip = true;
@@ -70,17 +68,15 @@ class File extends React.Component {
 	watch_func(e) {
 		e.stopPropagation();
 		e.preventDefault();
-		console.log("ACTION: Clicked ", e.target.className);
+
+		// Do not deselect when adding more cells
+		if(e.target.className == 'add-cell-button') return;
 
 		if( !this.b_initial_skip ) {
 			const name = e.target.className.split(' ');
-			console.log(this.selected);
 			if(name[0] == 'cell') {
-				console.log(e.target.dataset.id);
 				this.select_cell( e.target.dataset.id );
 			} else {
-
-				// Miss, no selection
 				this.deselect_all_cells();
 			}
 		}
@@ -95,13 +91,11 @@ class File extends React.Component {
 		this.setState({ selected: false });
 	}
 
-	cell_is_active( cell ) {
-		return this.selected[cell];
-	}
 
 	select_cell( cell ) {
 		this.selected[cell] = true;
 	}
+
 
 
 	// FUNCTIONS PASSED DOWN TO CELL CHILD COMPONENTS
@@ -110,17 +104,20 @@ class File extends React.Component {
 		this.ledger[idx] = data;
 	}
 
-	alert_selected(idx) {
+	alert_selected(idx, b_text_insert=false) {
 		this.setState({ selected: true });
 		this.selected[idx] = true;
 	}
 
-	// Helpers
+
+
+	/* CELL CONTROL AND DUMP TO DISK
+	 *******************************************************************/
 
 	add_cell() { 
 		this.setState({ cells: ++this.state.cells });
-		this.selected [this.state.cells-1 ] = false;
-		this.save();
+		this.selected[this.state.cells-1 ] = false;
+		//this.save();
 	}
 
 				
@@ -145,8 +142,12 @@ class File extends React.Component {
 		}
 
 		var json = JSON.stringify(bits);
-		//console.log(bits);
 	}
+
+
+
+	/* RENDER
+	 *********************************************************************/
 
 	render() {
 		var cells = [];
@@ -170,6 +171,10 @@ class File extends React.Component {
 		);
 	}
 }
+
+
+/* RENDER PAGE
+ *****************************************************************/
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root')
