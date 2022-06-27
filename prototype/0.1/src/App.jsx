@@ -77,12 +77,9 @@ class File extends React.Component {
 			console.log(this.selected);
 			if(name[0] == 'cell') {
 				console.log(e.target.dataset.id);
-				if( this.cell_is_active(e.target.dataset.id)) {
-					this.deselect_all_cells();
-				} else {
-					this.select_cell( e.target.dataset.id );
-				}
+				this.select_cell( e.target.dataset.id );
 			} else {
+
 				// Miss, no selection
 				this.deselect_all_cells();
 			}
