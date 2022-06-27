@@ -26,14 +26,16 @@ class File extends React.Component {
 
 		// store all the cell's data for dump to disk
 		this.ledger = {};
-		for( var i=0; i < INITIAL_CELLS; i++) this.ledger[i] = "";
+		for( var i=0; i <= INITIAL_CELLS; i++) this.ledger[i] = "";
 		this.update_ledger = this.update_ledger.bind(this);
 
 		// Select and Modify Cells
 		this.selected = {};
-		for( var i=0; i < INITIAL_CELLS; i++) this.selected[i] = false;
+		for( var i=0; i <= INITIAL_CELLS; i++) this.selected[i] = false;
 		this.alert_selected = this.alert_selected.bind(this);
-		const unselect_callback = this.watch_unselect.bind(this); // for event listener
+		this.watch_func = this.watch_func.bind(this);
+		this.b_watch = false;
+		this.b_initial_skip = true;
 	}
 
 
@@ -42,27 +44,50 @@ class File extends React.Component {
 
 	watch_unselect() {
 		// Unselect if the user clicks on anything other than an unselected cell 
-		window.addEventListener('click', this.unselect_callback, false);
+		if( !this.b_watch ) {
+			console.log("ADD Click Watchdog");
+			window.addEventListener('click', this.watch_func, false);
+			this.b_watch = true;
+		} else {
+			console.log("Alert : Watchdog already exists");
+		}
 	}
 
 
 	remove_unselected_watch() {
-		window.removeEventListener('click', this.unselect_callback, false);
+		if( this.b_watch) {
+			console.log("REMOVE Click Watchdog");
+			window.removeEventListener('click', this.watch_func, false);
+			this.b_watch = false;
+			this.b_initial_skip = true;
+		} else {
+			this.b_initial_skip = true;
+			return;
+		}
 	}
 
 
 	watch_func(e) {
 		e.stopPropagation();
-		console.log("ACTION: CLICKED ", e.target.className);
+		e.preventDefault();
+		console.log("ACTION: Clicked ", e.target.className);
 
-		const name = e.target.className.split(' ');
-		if(name[0] == 'cell') {
-			if( this.cell_is_active(e.target.dataset.id)) {
-				this.deselect_all_cells();
+		if( !this.b_initial_skip ) {
+			const name = e.target.className.split(' ');
+			console.log(this.selected);
+			if(name[0] == 'cell') {
+				console.log(e.target.dataset.id);
+				if( this.cell_is_active(e.target.dataset.id)) {
+					this.deselect_all_cells();
+				} else {
+					this.select_cell( e.target.dataset.id );
+				}
 			} else {
-				this.select_cell( e.target.dataset.id );
+				// Miss, no selection
+				this.deselect_all_cells();
 			}
 		}
+		this.b_initial_skip = false;
 	}
 
 
@@ -82,13 +107,6 @@ class File extends React.Component {
 	}
 
 
-	// Debug
-	componentDidUpdate() {
-		console.log("RENDER", this.state.selected);
-		console.log(this.selected);
-	}
-	
-
 	// FUNCTIONS PASSED DOWN TO CELL CHILD COMPONENTS
 
 	update_ledger( idx, data ) {
@@ -97,14 +115,13 @@ class File extends React.Component {
 
 	alert_selected(idx) {
 		this.setState({ selected: true });
-		console.log("CAUGHT ALERT FOR:", idx);
 		this.selected[idx] = true;
 	}
 
 	// Helpers
 
 	add_cell() { 
-		this.setState({ cells: this.state.cells + 1 });
+		this.setState({ cells: ++this.state.cells });
 		this.selected [this.state.cells-1 ] = false;
 		this.save();
 	}
@@ -152,7 +169,6 @@ class File extends React.Component {
 					<img src="" alt="" />
 				</div>
 				{ (this.state.selected) ? this.watch_unselect() : this.remove_unselected_watch() }
-				{ (this.state.selected) ? console.log("SELECTED") : "NOT SELECTED"}
 			</div>
 		);
 	}

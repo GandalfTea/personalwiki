@@ -45,11 +45,11 @@ class Cell extends React.Component {
 			)
 		} else {
 			return(
-				<div className={ (this.state.selected) ? (this.state.data=="") ? 'cell ' + this.props.selected + ' cell-empty'
+				<div className={ (this.props.selected !== "") ? (this.state.data=="") ? 'cell ' + this.props.selected + ' cell-empty'
 																																			 : 'cell ' + this.props.selected 
 																							 : (this.state.data=="") ? 'cell cell-empty' : 'cell' } 
 						 data-id={ this.id }
-						 onClick={   (this.state.selected) ? () => this.setState({focused: true}) 
+						 onClick={   (this.props.selected !== "") ? () => this.setState({focused: true}) 
 										 			  									 : () => { this.setState({selected: true}); 
 																											   this.props.alert_selected(this.id) }}> 
 						<ReactMarkdown>{this.state.data}</ReactMarkdown> 
