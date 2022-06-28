@@ -2,11 +2,6 @@
 A personal WIKI for storing information. It is designed like Jupyter Notebook without a kernel, each cell formats markdown. It also supports interlinking between files.
 
 
-#### Branches
-
-The main branch contains all of the prototype, design and user testing data. In order to try out the application, a different version branch will be created once a prototype version is out. Right now, the 0.1 branch can be tested locally.
-
-
 ### Versions
 
 #### 0.1
