@@ -10,7 +10,8 @@ Dependencies:
 pip install django
 ```
 ```bash
-~personalwiki $ start.sh
+$ git clone https://github.com/GandalfTea/personalwiki [ choose which branch you want, the main one is stable ]
+$ cd personalwiki && bash start.sh
 ```
 
 
