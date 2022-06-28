@@ -2,7 +2,7 @@
 &nbsp;
 
 #### About
-A personal WIKI for storing notebooks and information. It is inspired Jupyter Notebook, but works without a kernel, each cell formatting only markdown. On top of this, it supports various file relationships and helpful tools that make remembering and quickly accessing the information easy. 
+A personal WIKI for storing notebooks and information. It is inspired by Jupyter Notebook, but works without a kernel, each cell formatting only Markdown and LaTeX. On top of this, it supports various file relationships and helpful tools that make remembering and quickly accessing the information easy. 
 
 As this is still in development, there are many more features to come. The code is open source and general support for easy plugins will be added in the future.
 
@@ -10,7 +10,6 @@ As this is still in development, there are many more features to come. The code 
 
 #### Use
 
-Dependencies:
 ```python
 pip install django
 ```
@@ -26,7 +25,7 @@ $ cd personalwiki && bash start.sh
 ### Versions
 
 #### 0.1
-This prototype version focuses only on the Cell functionality. Front end is done in React.js in JSX and focuses on correct UI/UX and Markdown / LaTeX Markdon rendering and editing. The back end is a Django MVT with the basic development webserver. The Model is:
+This prototype version focuses only on the Cell functionality. Front end is done in React.js featuring cell selection and modification and Markdown / LaTeX rendering and editing. The backend is a Django webserver with a sqlite relational database. The model is:
 
 ```python
 class Cell(models.Model):
@@ -54,8 +53,7 @@ Things to be added in version 0.2:
 
 &nbsp;
 
-#### ToDo:
+#### To Research:
 
-* JSON Web Signiture
+* Public/Private key Login
 * Support the creation and testing of plugins
-* Write a from-scratch python server and remove the Django dependency.
