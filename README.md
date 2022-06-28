@@ -1,6 +1,7 @@
 
-A personal WIKI for storing information. It is designed like Jupyter Notebook without a kernel, each cell formats markdown. It also supports interlinking between files.
+A personal WIKI for storing notebooks and information. It is inspired Jupyter Notebook, but works without a kernel, each cell formatting only markdown. On top of this, it supports various file relationships and helpful tools that make remembering and quickly accessing the information easy. 
 
+As this is still in development, there are many more features to come. The code is open source and general support for easy plugins will be added in the future.
 
 ### Versions
 

@@ -5,11 +5,11 @@ module.exports = {
 
 	mode: 'development',
 
-	entry: path.resolve(__dirname, './src/App.jsx'),
+	entry: path.resolve(__dirname, './js/App.jsx'),
 
 	output: {
 		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist/'),
+		path: path.resolve(__dirname, 'static/'),
 	},
 
 	module: {
@@ -34,7 +34,7 @@ module.exports = {
 	},
 
 	devServer: {
-		static: path.resolve(__dirname, './dist'),
+		static: path.resolve(__dirname, './static'),
 	},
 
 };
