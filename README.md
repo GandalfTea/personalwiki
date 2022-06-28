@@ -3,6 +3,17 @@ A personal WIKI for storing notebooks and information. It is inspired Jupyter No
 
 As this is still in development, there are many more features to come. The code is open source and general support for easy plugins will be added in the future.
 
+#### Use
+
+Dependencies:
+```python
+pip install django
+```
+```bash
+~personalwiki $ start.sh
+```
+
+
 ### Versions
 
 #### 0.1
@@ -22,6 +33,13 @@ class Notebook(models.Model):
 	titles = models.CharField(max_length=120)
 	files = models.ForeignKey(File, on_delete=models.CASCADE)
 ```
+
+#### 0.2
+Things to be added in version 0.2:
+* Visual representation of linked data.
+* Better control over Files and Cells, as well as text formatting.
+* Custom WSGI compliant MVT server, to make it more lightweight.
+* Use custom .nb files instead of a relational sqlite database.
 
 
 #### ToDo:
