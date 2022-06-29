@@ -13,10 +13,17 @@ As this is still in development, there are many more features to come. The code 
 ```python
 pip install django
 ```
+
+With server:
 ```bash
 $ git clone https://github.com/GandalfTea/personalwiki 
 [ choose which branch you want, the main one is stable ]
-$ cd personalwiki && bash start.sh
+$ cd personalwiki && bash start.sh [ localhost:8080 ]
+```
+
+Only Frontend:
+```bash
+$ npm run watch [ localhost:8000 ]
 ```
 
 &nbsp;
