@@ -10,14 +10,14 @@ As this is still in development, there are many more features to come. The code 
 
 #### Use
 
-```python
-pip install django
+```bash
+$ pip install django
+$ git clone https://github.com/GandalfTea/personalwiki 
+[ choose which branch you want, the main one is probably stable ]
 ```
 
 With server:
 ```bash
-$ git clone https://github.com/GandalfTea/personalwiki 
-[ choose which branch you want, the main one is stable ]
 $ cd personalwiki && bash start.sh [ localhost:8080 ]
 ```
 
