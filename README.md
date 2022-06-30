@@ -35,18 +35,18 @@ $ npm run watch [ localhost:8000 ]
 This prototype version focuses only on the Cell functionality. Front end is done in React.js featuring cell selection and modification and Markdown / LaTeX rendering and editing. The backend is a Django webserver with a sqlite relational database. The model is:
 
 ```python
-class Cell(models.Model):
-	data = models.CharField(max_length=5000)
-	idx  = models.PositiveIntegerField()
+class Notebook(models.Model):
+    title = models.CharField(max_length=120)
 
 class File(models.Model):
-	name = models.CharField(max_length=200)
-	last_edit = models.DateField()
-	cells = models.ForeignKey(Cell, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    last_edit = models.DateTimeField(auto_now_add=True)
+    notebook = models.ForeignKey(Notebook, on_delete=models.SET_NULL, null=True, blank=True)
 
-class Notebook(models.Model):
-	titles = models.CharField(max_length=120)
-	files = models.ForeignKey(File, on_delete=models.CASCADE)
+class Cell(models.Model):
+    data = models.TextField()
+    idx = models.PositiveIntegerField()
+    main_file = models.ForeignKey(File, on_delete=models.SET_NULL, null=True, blank=True)
 ```
 
 &nbsp;
