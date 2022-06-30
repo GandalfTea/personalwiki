@@ -11,19 +11,21 @@ As this is still in development, there are many more features to come. The code 
 #### Use
 
 ```bash
-$ pip install django
 $ git clone https://github.com/GandalfTea/personalwiki 
 [ choose which branch you want, the main one is probably stable ]
 ```
 
 With server:
 ```bash
-$ cd personalwiki && bash start.sh [ localhost:8080 ]
+$ cd personalwiki && bash start.sh 	[ localhost:8080 ]
+[ requires django and djangorestframework, which are automatically ]
+[ pip installed by the script in case you don't already have them  ]
+
 ```
 
 Only Frontend:
 ```bash
-$ npm run watch [ localhost:8000 ]
+$ npm run watch		 [ localhost:8000 ]
 ```
 
 &nbsp;
