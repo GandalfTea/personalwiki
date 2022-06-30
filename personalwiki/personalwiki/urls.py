@@ -18,9 +18,19 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+from rest_framework import routers
+from wikiapp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='file_editing.html'))
 ] 
+
+router = routers.DefaultRouter()
+router.register('api/cells', views.CellViewSet)
+router.register('api/files', views.FileViewSet)
+router.register('api/notebooks', views.NotebookViewSet)
+
+urlpatterns += router.urls
 
 urlpatterns += staticfiles_urlpatterns()
