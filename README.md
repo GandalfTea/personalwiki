@@ -17,15 +17,17 @@ $ git clone https://github.com/GandalfTea/personalwiki
 
 With server:
 ```bash
-$ cd personalwiki && bash start.sh 	[ localhost:8080 ]
-[ requires django and djangorestframework, which are automatically ]
-[ pip installed by the script in case you don't already have them  ]
-
+$ cd personalwiki && bash start.sh 		  [ localhost:8080 ]
 ```
+This requires django and djangorestframework, which are automatically
+pip installed by the script in case you don't already have them.
+
+&nbsp;
+
 
 Only Frontend:
 ```bash
-$ npm run watch		 [ localhost:8000 ]
+$ npm run watch		 			  [ localhost:8000 ]
 ```
 
 &nbsp;
