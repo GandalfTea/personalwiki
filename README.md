@@ -15,20 +15,13 @@ $ git clone https://github.com/GandalfTea/personalwiki
 [ choose which branch you want, the main one is probably stable ]
 ```
 
-With server:
 ```bash
-$ cd personalwiki && bash start.sh 		  [ localhost:8080 ]
+$ cd personalwiki && bash start.sh 	       [ localhost:8080 ]
 ```
-This requires django and djangorestframework, which are automatically
+This requires `django` and `djangorestframework`, which are automatically
 pip installed by the script in case you don't already have them.
 
 &nbsp;
-
-
-Only Frontend:
-```bash
-$ npm run watch		 			  [ localhost:8000 ]
-```
 
 &nbsp;
 
@@ -36,7 +29,7 @@ $ npm run watch		 			  [ localhost:8000 ]
 ### Versions
 
 #### 0.1
-This prototype version focuses only on the Cell functionality. Front end is done in React.js featuring cell selection and modification and Markdown / LaTeX rendering and editing. The backend is a Django webserver with a sqlite relational database. The model is:
+This prototype version focuses only on the Cell functionality. Front end is done in React.js featuring cell selection and modification with Markdown / LaTeX rendering and editing. Data is served through a REST API. The backend is a Django WSGI webserver with a sqlite relational database. The model is:
 
 ```python
 class Notebook(models.Model):
