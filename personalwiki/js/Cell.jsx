@@ -13,15 +13,17 @@ class Cell extends React.Component {
 		super(props);
 		this.id = this.props.id;
 		this.state = { focused: false, data: "" };
+		this.b_update_from_fetch = false;
 		this.cell_text = React.createRef();
-
-		if(this.props.data != null || this.props.data != "") {
-			this.setState({data: this.props.data});
-		}
 	}
 
 	componentDidUpdate() {
 		if(this.state.focused) this.cell_text.current.focus();
+
+		if( !this.b_update_from_fetch && this.props.data != null && this.props.data != "") {
+			this.setState({data: this.props.data});
+			this.b_update_from_fetch = true;
+		}
 	}
 
 	render() {

@@ -84,7 +84,7 @@ class File extends React.Component {
 		this.fetch_data("None", WORKING_FILE).then( res => { 
 			this.DB_DATA=res
 			this.setState({data_ready: true});
-			console.log(this.DB_DATA, "FUCKY ");
+			console.log(this.DB_DATA);
 		});
 	}
 
@@ -198,15 +198,14 @@ class File extends React.Component {
 
 		// Render db data
 		if(this.b_initial_render && this.state.data_ready) {
+			let idx = 0;
 			for(const i in this.DB_DATA) {
-							/*
-				cells.push( <Cell key={i.idx} id={i.idx} 
+				cells.push( <Cell key={idx} id={idx} 
 													update_callback={this.cache_edit} 
 													alert_selected={this.alert_selected} 
-													selected={ (this.selected[i]) ? "cell-selected " : "" }
-													data={i.data} /> );
-													*/
-				console.log(i)
+													selected={ (this.selected[idx]) ? "cell-selected " : "" }
+													data={this.DB_DATA[i].data} /> );
+				idx++;
 			}	
 		} else {
 			for( let i=0; i<this.state.cells; i++) {
