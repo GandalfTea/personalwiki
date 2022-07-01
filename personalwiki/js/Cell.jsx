@@ -14,7 +14,10 @@ class Cell extends React.Component {
 		this.id = this.props.id;
 		this.state = { focused: false, data: "" };
 		this.cell_text = React.createRef();
-		this._data = "";
+
+		if(this.props.data != null || this.props.data != "") {
+			this.setState({data: this.props.data});
+		}
 	}
 
 	componentDidUpdate() {
@@ -35,11 +38,12 @@ class Cell extends React.Component {
 
 								// TODO: This does not store empty lines.
 								this.setState({ data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-								//this._data = JSON.stringify(this.cell_text.current.innerText);
-								this.cell_text.current.innerText = "";
 
 								// Update ledger on File parent class
-								this.props.update_callback(this.id, this._data);
+								this.props.update_callback(this.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
+
+								this.cell_text.current.innerText = "";
+
 							}}>
 				{this.state.data.replaceAll('\n\n', '\r\n')}</div>
 			)

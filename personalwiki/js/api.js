@@ -9,20 +9,30 @@
 					 computation.												*/
 			
 
-function fetch_cells(file) {
+async function fetch_cells(file) {
+	/*
 	fetch('/api/cells/').then(res => res.json()).then( (result) => {
-		filter_cells(file, result)
+		return filter_cells(file, result);
 	}, (err) => {
 		handle_cell_fetch_failure(error);
 	});
+	*/
+
+	// TODO: ERR func
+
+	const res = await fetch('/api/cells/');
+	const json = await res.json();
+	return filter_cells(file, json);
 }
 
 function filter_cells(file, cells) {
+	var data = [];
 	for( let i=0; i < Object.keys(cells).length; i++ ) {
 		if(cells[i].main_file != null && cells[i].main_file.name == file) {
-			console.log(cells[i]);
+			data.push(cells[i]);
 		}
 	}
+	return data;
 }
 
 function handle_cell_fetch_failure(error) {
