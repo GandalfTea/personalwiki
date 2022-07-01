@@ -2,6 +2,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Cell from './Cell.jsx';
+import fetch_cells from './api.js';
+
+
+/* Global Variables */
+
+// Constant file for demo purposes.
+const WORKING_FILE = "Demo File";
+
+// Only cache edited cells in working memory.
+// This should hopefully reduce the load when working with big documents
+const CELL_CACHE = {}
+
+// Time between autosaves
+const AUTOSAVE = 10000;
+
+
+
+/* Data Management  */
+
+function fetch_data(notebook, file) {
+	return fetch_cells(WORKING_FILE);
+}
+
+function save_data(notebook, file, cells) {
+	// Save to db
+	// Check database index integrity, if needed reorder items
+}
+
+
+
+/* UI  */
 
 const PageHeader = (props) => {
 	
@@ -16,11 +47,13 @@ const PageHeader = (props) => {
 	)
 }
 
+
 class File extends React.Component {
 	constructor(props) {
 		super(props);
 
 		const INITIAL_CELLS = 2;
+		const CELL_INDEX = INITIAL_CELLS;
 		var EDITED = false;
 
 		this.state = { cells: INITIAL_CELLS, selected: false }
@@ -135,6 +168,7 @@ class File extends React.Component {
 	// Write to disk
 	save() {
 
+		/*
 		var date = new Date();
 		var bits = {
 			"cells": [],
@@ -153,6 +187,7 @@ class File extends React.Component {
 		}
 
 		var json = JSON.stringify(bits);
+		*/
 	}
 
 
@@ -171,7 +206,7 @@ class File extends React.Component {
 
 		return(
 			<div className="page">
-				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title="Vector Arithmetic" />
+				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
 				{cells}
 				<p class="last-edit">{"Last Update: " + this.get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
