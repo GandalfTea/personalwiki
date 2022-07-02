@@ -9,7 +9,7 @@ module.exports = {
 
 	output: {
 		filename: 'file-bundle.js',
-		path: path.resolve(__dirname, 'static/'),
+		path: path.resolve(__dirname, './wikiapp/static/'),
 	},
 
 	module: {
