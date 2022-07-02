@@ -75,18 +75,23 @@ class File extends React.Component {
 	/* DATA MANAGEMENT 
 	 ********************************************************************/
 
+
 	fetch_data = async (notebook, file) => {
 		return await fetch_cells(WORKING_FILE);
 	}
-
 
 	componentDidMount() {
 		this.fetch_data("None", WORKING_FILE).then( res => { 
 			this.DB_DATA=res
 			this.setState({data_ready: true});
-			console.log(this.DB_DATA);
 		});
 	}
+
+	push_data() {
+		// Index is kil, we have to keep track of new ones and then push at end of list	
+	}
+
+
 
 	/* CELL SELECTION
 	 ********************************************************************/
@@ -183,9 +188,8 @@ class File extends React.Component {
 
 				
 	// Write to disk
-	save() {
-
-	}
+	// This is not used yet. We dump to the database.
+	dump() {}
 
 
 
