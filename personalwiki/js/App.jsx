@@ -8,7 +8,7 @@ import fetch_cells from './api.js';
 /* Global Variables */
 
 // Constant file for demo purposes.
-const WORKING_FILE = "file_name";
+const WORKING_FILE = "Demo File";
 
 // Only cache edited cells in working memory.
 // This should hopefully reduce the load when working with big documents
