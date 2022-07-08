@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 """ I am not sure if the cells should be stored separately
     or simply in a single data field. Max theoretical file
@@ -20,9 +21,15 @@ class File(models.Model):
     def __str__(self):
         return self.name
 
+
+""" The cell model has both a uuid and a hash :
+    The uuid is for identifying if the cell is in the db.
+    The hash is for checking in the Front-End whether the data has been changed.                      """
+
 class Cell(models.Model):
     data = models.TextField()
-    idx = models.PositiveIntegerField()
+    uuid = models.CharField(unique=True, default=uuid.uuid4, editable=False, max_length=200)
+    uhash = models.CharField(max_length=120, default="NULL")
     main_file = models.ForeignKey(File, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):

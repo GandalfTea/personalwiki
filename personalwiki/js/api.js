@@ -39,4 +39,6 @@ function handle_cell_fetch_failure(error) {
 	console.log("OOPSIE, there was a problem >.<");
 }
 
-export default fetch_cells;
+//export default fetch_cells;
+
+//async function post_cell()

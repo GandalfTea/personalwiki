@@ -41,7 +41,8 @@ class FileSerializer(serializers.Serializer):
 
 class CellSerializer(serializers.Serializer):
     data = serializers.CharField(style={'base_template' : 'textarea.html'})
-    idx = serializers.IntegerField()
+    uuid = serializers.CharField()
+    uhash = serializers.CharField()
     main_file = FileSerializer()
 
     def create(self, validated_data):
@@ -49,7 +50,7 @@ class CellSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.data = validated_data.get('data', instance.data)
-        instance.idx = validated_data.get('idx', instance.idx)
+        instance.uuid = validated_data.get('uuid', instance.uuid)
         instance.main_file = validated_data.get('main_file', instance.main_file)
         instance.save()
         return instance
