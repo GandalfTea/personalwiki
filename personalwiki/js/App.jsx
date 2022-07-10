@@ -84,6 +84,7 @@ class File extends React.Component {
 		this.fetch_data("None", WORKING_FILE).then( res => { 
 			this.DB_DATA=res
 			this.setState({data_ready: true});
+			this.setState({ cells: Object.keys(this.DB_DATA).length });
 		});
 	}
 
@@ -196,13 +197,12 @@ class File extends React.Component {
 	/* RENDER
 	 *********************************************************************/
 
-	render() {
-
+	format_cells() {
 		var cells = [];
+		let idx = 0;
 
 		// Render db data
 		if(this.b_initial_render && this.state.data_ready) {
-			let idx = 0;
 			for(const i in this.DB_DATA) {
 				cells.push( <Cell key={idx} id={idx} 
 													update_callback={this.cache_edit} 
@@ -211,14 +211,27 @@ class File extends React.Component {
 													data={this.DB_DATA[i].data} /> );
 				idx++;
 			}	
-		} else {
-			for( let i=0; i<this.state.cells; i++) {
-				cells.push( <Cell key={i} id={i} 
-													update_callback={this.cache_edit} 
-													alert_selected={this.alert_selected} 
-													selected={ (this.selected[i]) ? "cell-selected " : "" }/> );
-			}
+
+			// Reset cell count 
+			this.setState({ cells: idx });
+			this.selected = {};
+			this.b_initial_render = false;
+			for( var i=0; i <= idx; i++) this.selected[i] = false;
+
 		}
+		for( let i=0; i<this.state.cells; i++) {
+			cells.push( <Cell key={i} id={idx} 
+												update_callback={this.cache_edit} 
+												alert_selected={this.alert_selected} 
+												selected={ (this.selected[i]) ? "cell-selected " : "" }/> );
+			idx++;
+		}
+		return cells;
+	}
+
+	render() {
+
+		const cells = this.format_cells();
 
 		return(
 			<div className="page">

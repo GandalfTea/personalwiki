@@ -39,6 +39,9 @@ function handle_cell_fetch_failure(error) {
 	console.log("OOPSIE, there was a problem >.<");
 }
 
-//export default fetch_cells;
+async function post_cell() {
+	// Post individual cell once 
+}
 
-//async function post_cell()
+export default fetch_cells;
+
