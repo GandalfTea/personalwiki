@@ -15,7 +15,7 @@ class Notebook(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=200)
-    last_edit = models.DateTimeField(auto_now_add=True)
+    #last_edit = models.DateTimeField(auto_now_add=True, null=True)
     notebook = models.ForeignKey(Notebook, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -30,7 +30,7 @@ class Cell(models.Model):
     data = models.TextField()
     uuid = models.CharField(unique=True, default=uuid.uuid4, editable=False, max_length=200)
     uhash = models.CharField(max_length=120, default="NULL")
-    main_file = models.ForeignKey(File, on_delete=models.SET_NULL, null=True, blank=True)
+    #main_file = models.ForeignKey(File, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.data

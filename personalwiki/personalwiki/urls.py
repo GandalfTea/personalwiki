@@ -18,16 +18,22 @@ from django.urls import path
 from django.views.generic import TemplateView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from rest_framework import routers
 from wikiapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='file_editing.html'))
+    path('', TemplateView.as_view(template_name='file_editing.html')),
+    path('api/cells/', views.CellsView),
+    path('api/cell/<uuid:pk>', views.CellView)
 ] 
 
+urlpatterns = format_suffix_patterns(urlpatterns)
+
 router = routers.DefaultRouter()
-router.register('api/cells', views.CellViewSet)
+#router.register('api/cells', views.CellView, basename='Cell')
 router.register('api/files', views.FileViewSet)
 router.register('api/notebooks', views.NotebookViewSet)
 

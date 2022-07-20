@@ -20,3 +20,42 @@ class FileViewSet(viewsets.ModelViewSet):
 class NotebookViewSet(viewsets.ModelViewSet):
     queryset = Notebook.objects.all()
     serializer_class = NotebookSerializer
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def CellView(request, pk):
+
+    if request.method == 'GET':
+        cells = Cell.objects.all()
+        serializer = CellSerializer(cells, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        print("\n\n\nDATA")
+
+        #request.data['main_file'] = File.objects.first()
+
+        serializer = CellSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response( serializer.data, status = status.HTTP_201_CREATED )
+        print(serializer.errors)
+        print("\n\n")
+        return Response( serializer.errors, status=status.HTTP_400_BAD_REQUEST )
+
+    elif request.method == 'DELETE':
+        cell.delete()
+        return Response( status=status.HTTP_204_NO_CONTENT )
+
+@api_view(['GET', 'POST'])
+def CellsView(request):
+    if request.method == 'GET':
+        cells = Cell.objects.all()
+        serializer = CellSerializer(cells, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serialzier.errors, status=status.HTTP_400_BAD_REQUEST)

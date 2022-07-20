@@ -22,7 +22,7 @@ class NotebookSerializer(serializers.Serializer):
 
 class FileSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
-    last_edit = serializers.DateTimeField()
+    #last_edit = serializers.DateTimeField()
     notebook = NotebookSerializer()
 
     def create(self, validated_data):
@@ -39,11 +39,11 @@ class FileSerializer(serializers.Serializer):
         model = File
 
 
+    #main_file = FileSerializer()
 class CellSerializer(serializers.Serializer):
     data = serializers.CharField(style={'base_template' : 'textarea.html'})
     uuid = serializers.CharField()
     uhash = serializers.CharField()
-    main_file = FileSerializer()
 
     def create(self, validated_data):
         return Cell.objects.create(**validated_data)
@@ -51,7 +51,7 @@ class CellSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.data = validated_data.get('data', instance.data)
         instance.uuid = validated_data.get('uuid', instance.uuid)
-        instance.main_file = validated_data.get('main_file', instance.main_file)
+        #instance.main_file = validated_data.get('main_file', instance.main_file)
         instance.save()
         return instance
 

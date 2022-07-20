@@ -2,8 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Cell from './Cell.jsx';
-import fetch_cells from './api.js';
+import { fetch_cells, post_cell_update } from './api.js';
 
+import {v4 as uuid } from 'uuid';
 
 /* Global Variables */
 
@@ -66,6 +67,8 @@ class File extends React.Component {
 
 		this.alert_selected = this.alert_selected.bind(this);
 		this.watch_func = this.watch_func.bind(this);
+		this.push_data = this.push_data.bind(this);
+		this.cache_edit = this.cache_edit.bind(this);
 
 		this.b_watch = false; // watch for deselect clicks?
 		this.b_initial_skip = true;
@@ -90,8 +93,11 @@ class File extends React.Component {
 
 	push_data() {
 		// Index is kil, we have to keep track of new ones and then push at end of list	
+		for(let i=0; i < Object.Keys(this.DB_DATA).length; i++) {
+			//console.log(this.DB_DATA[i]);
+			post_cell_update(DB_DATA[i]);
+		}
 	}
-
 
 
 	/* CELL SELECTION
@@ -157,9 +163,13 @@ class File extends React.Component {
 	cache_edit( idx, data ) {
 		EDIT_CACHE[idx] = {
 			idx: idx,
+			uuid: uuid(),
 			data: data,
-			main_file: WORKING_FILE
+			uhash: "Demo Hash",
+			//main_file: { name: "Demo File", notebook: { title: "Demo Notebook" } },
 		}
+		//this.push_data();
+		post_cell_update(EDIT_CACHE[idx]);
 	}
 
 	alert_selected(idx, b_text_insert=false) {
