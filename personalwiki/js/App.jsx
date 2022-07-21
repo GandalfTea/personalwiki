@@ -10,6 +10,7 @@ import {v4 as uuid } from 'uuid';
 
 // Constant file for demo purposes.
 const WORKING_FILE = "Demo File";
+const STATIC_URL = "../wikiapp/static/";
 
 // Only cache edited cells in working memory.
 // This should hopefully reduce the load when working with big documents
@@ -86,15 +87,13 @@ class File extends React.Component {
 	componentDidMount() {
 		this.fetch_data("None", WORKING_FILE).then( res => { 
 			this.DB_DATA=res
-			this.setState({data_ready: true});
-			this.setState({ cells: Object.keys(this.DB_DATA).length });
+			this.setState({data_ready: true, cells: Object.keys(this.DB_DATA).length });
 		});
 	}
 
 	push_data() {
 		// Index is kil, we have to keep track of new ones and then push at end of list	
 		for(let i=0; i < Object.Keys(this.DB_DATA).length; i++) {
-			//console.log(this.DB_DATA[i]);
 			post_cell_update(DB_DATA[i]);
 		}
 	}
@@ -212,30 +211,33 @@ class File extends React.Component {
 		let idx = 0;
 
 		// Render db data
-		if(this.b_initial_render && this.state.data_ready) {
-			for(const i in this.DB_DATA) {
+		if(this.state.data_ready) {
+			this.EDIT_CACHE = this.DB_DATA
+			for(var i = 0; i <  Object.keys(this.EDIT_CACHE).length; i++) {
 				cells.push( <Cell key={idx} id={idx} 
 													update_callback={this.cache_edit} 
 													alert_selected={this.alert_selected} 
 													selected={ (this.selected[idx]) ? "cell-selected " : "" }
-													data={this.DB_DATA[i].data} /> );
+													data={this.EDIT_CACHE[i].data} /> );
 				idx++;
 			}	
 
 			// Reset cell count 
-			this.setState({ cells: idx });
 			this.selected = {};
 			this.b_initial_render = false;
 			for( var i=0; i <= idx; i++) this.selected[i] = false;
-
 		}
+
+					/*
 		for( let i=0; i<this.state.cells; i++) {
-			cells.push( <Cell key={i} id={idx} 
+			cells.push( <Cell key={idx} id={idx} 
 												update_callback={this.cache_edit} 
 												alert_selected={this.alert_selected} 
 												selected={ (this.selected[i]) ? "cell-selected " : "" }/> );
 			idx++;
 		}
+		*/
+		console.log(cells)
 		return cells;
 	}
 
@@ -247,7 +249,7 @@ class File extends React.Component {
 			<div className="page">
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
 				{cells}
-				<p class="last-edit">{"Last Update: " + this.get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
+				<p className="last-edit">{"Last Update: " + this.get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<img src="" alt="" />
 				</div>

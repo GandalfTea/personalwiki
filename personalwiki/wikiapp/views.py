@@ -31,10 +31,6 @@ def CellView(request, pk):
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        print("\n\n\nDATA")
-
-        #request.data['main_file'] = File.objects.first()
-
         serializer = CellSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
