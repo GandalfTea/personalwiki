@@ -2,7 +2,7 @@
 &nbsp;
 
 #### About
-A personal WIKI for storing notebooks and information. It is inspired by Jupyter Notebook, but works without a kernel, each cell formatting only Markdown and LaTeX. On top of this, it supports various file relationships and helpful tools that make remembering and quickly accessing the information easy. 
+A personal WIKI for storing notebooks and information. It is inspired by Jupyter Notebook, but works without a kernel, each cell formatting only Markdown and LaTeX. 
 
 As this is still in development, there are many more features to come. The code is open source and general support for easy plugins will be added in the future.
 
@@ -37,14 +37,14 @@ class Notebook(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=200)
-    last_edit = models.DateTimeField(auto_now_add=True)
     notebook = models.ForeignKey(Notebook, on_delete=models.SET_NULL, null=True, blank=True)
 
 class Cell(models.Model):
     data = models.TextField()
-    idx = models.PositiveIntegerField()
-    main_file = models.ForeignKey(File, on_delete=models.SET_NULL, null=True, blank=True)
+    uuid = models.UUIDField(primary_key=True, unique=True, default=uuid.uuid4, editable=False)
+    uhash = models.CharField(max_length=120, default="NULL")
 ```
+The primary key is the uuid, and the views also serve instances from uuid
 
 &nbsp;
 
