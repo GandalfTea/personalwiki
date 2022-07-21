@@ -70,7 +70,7 @@ class Cell extends React.Component {
 					<div className='cell-selected-options'>
 						<button type='button' onClick={ () => console.log("Up") }><img src={IMG_ARROW} alt='move cell up' /></button>
 						<button type='button' onClick={ () => console.log("Down") }><img src={IMG_ARROW} alt='move cell down' /></button>
-						<button type='button' onClick={ () => console.log("Delete") }><img src={IMG_TRASH} alt='delete cell' /></button>
+						<button type='button' onClick={ () => this.props.delete_callback(this.id) }><img src={IMG_TRASH} alt='delete cell' /></button>
 					</div>
 				</div>
 			)

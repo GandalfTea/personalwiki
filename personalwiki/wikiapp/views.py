@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from wikiapp.serializers import CellSerializer, FileSerializer, NotebookSerializer
 from wikiapp.models import Cell, File, Notebook
 
+from django.shortcuts import get_object_or_404
 
 class CellViewSet(viewsets.ModelViewSet):
     serializer_class = CellSerializer
@@ -25,13 +26,22 @@ class NotebookViewSet(viewsets.ModelViewSet):
 @api_view(['GET', 'PUT', 'DELETE'])
 def CellView(request, pk):
 
-    if request.method == 'GET':
+    try:
+        cell = Cell.objects.get(pk=pk);
+    except Cell.DoesNotExist:
+        
         cells = Cell.objects.all()
-        serializer = CellSerializer(cells, many=True)
+        for i in cells:
+            if(i.pk == pk):
+                cell = i
+        #return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = CellSerializer(cell)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = CellSerializer(data=request.data)
+        serializer = CellSerializer(cell, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response( serializer.data, status = status.HTTP_201_CREATED )
@@ -40,7 +50,8 @@ def CellView(request, pk):
         return Response( serializer.errors, status=status.HTTP_400_BAD_REQUEST )
 
     elif request.method == 'DELETE':
-        cell.delete()
+        #Cell.objects.filter(pk=request.data['uuid']).delete()
+        cell.delete();
         return Response( status=status.HTTP_204_NO_CONTENT )
 
 @api_view(['GET', 'POST'])

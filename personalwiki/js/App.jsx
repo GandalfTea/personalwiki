@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Cell from './Cell.jsx';
-import { fetch_cells, post_cell_update } from './api.js';
+import { fetch_cells, post_cell_update, delete_cell } from './api.js';
 
 import {v4 as uuid } from 'uuid';
 
@@ -70,6 +70,7 @@ class File extends React.Component {
 		this.watch_func = this.watch_func.bind(this);
 		this.push_data = this.push_data.bind(this);
 		this.cache_edit = this.cache_edit.bind(this);
+		this.delete_cell_data = this.delete_cell_data.bind(this);
 
 		this.b_watch = false; // watch for deselect clicks?
 		this.b_initial_skip = true;
@@ -96,6 +97,12 @@ class File extends React.Component {
 		for(let i=0; i < Object.Keys(this.DB_DATA).length; i++) {
 			post_cell_update(DB_DATA[i]);
 		}
+	}
+
+	delete_cell_data(idx) {
+		delete_cell(this.DB_DATA[idx]);
+		//this.EDIT_CACHE.splice(idx, 1);
+		//this.setState({ cells: --this.state.cells});
 	}
 
 
@@ -174,6 +181,7 @@ class File extends React.Component {
 	alert_selected(idx, b_text_insert=false) {
 		this.setState({ selected: true });
 		this.selected[idx] = true;
+		console.log(this.selected)
 	}
 
 	/* Helpers
@@ -217,6 +225,7 @@ class File extends React.Component {
 				cells.push( <Cell key={idx} id={idx} 
 													update_callback={this.cache_edit} 
 													alert_selected={this.alert_selected} 
+													delete_callback={this.delete_cell_data}
 													selected={ (this.selected[idx]) ? "cell-selected " : "" }
 													data={this.EDIT_CACHE[i].data} /> );
 				idx++;
@@ -228,15 +237,19 @@ class File extends React.Component {
 			for( var i=0; i <= idx; i++) this.selected[i] = false;
 		}
 
-					/*
-		for( let i=0; i<this.state.cells; i++) {
-			cells.push( <Cell key={idx} id={idx} 
-												update_callback={this.cache_edit} 
-												alert_selected={this.alert_selected} 
-												selected={ (this.selected[i]) ? "cell-selected " : "" }/> );
-			idx++;
+		if(idx==0) {
+			for( let i=0; i<2; i++) {
+				cells.push( <Cell key={idx} id={idx} 
+													update_callback={this.cache_edit} 
+													alert_selected={this.alert_selected} 
+													delete_callback={this.delete_cell_data}
+													selected={ (this.selected[idx]) ? "cell-selected " : "" }
+													/> );
+				idx++;
+			}
 		}
-		*/
+		for( var i=0; i < idx; i++) this.selected[i] = false;
+		console.log(this.selected)
 		console.log(cells)
 		return cells;
 	}

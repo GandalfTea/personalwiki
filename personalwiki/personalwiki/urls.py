@@ -33,7 +33,6 @@ urlpatterns = [
 urlpatterns = format_suffix_patterns(urlpatterns)
 
 router = routers.DefaultRouter()
-#router.register('api/cells', views.CellView, basename='Cell')
 router.register('api/files', views.FileViewSet)
 router.register('api/notebooks', views.NotebookViewSet)
 

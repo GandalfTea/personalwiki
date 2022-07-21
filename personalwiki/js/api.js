@@ -49,5 +49,12 @@ async function post_cell_update(cell) {
 	xhr.send(JSON.stringify(cell));
 }
 
-export { fetch_cells, post_cell_update };
+async function delete_cell(cell) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("DELETE", "http://localhost:8000/api/cell/" + cell.uuid , true);
+	xhr.setRequestHeader("Content-Type", 'application/json');
+	xhr.send(JSON.stringify(cell));
+}
+
+export { fetch_cells, post_cell_update, delete_cell };
 
