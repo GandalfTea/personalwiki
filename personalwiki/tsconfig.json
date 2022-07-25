@@ -1,0 +1,9 @@
+
+{
+	"compilerOptions": {
+		"outDir": "./wikiapp/static/",
+		"allowJs": true,
+		"target": "es5"
+	},
+	"include": ["./js/**/**"]
+}

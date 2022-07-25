@@ -5,7 +5,7 @@ module.exports = {
 
 	mode: 'development',
 
-	entry: path.resolve(__dirname, './js/App.jsx'),
+	entry: path.resolve(__dirname, './js/App.tsx'),
 
 	output: {
 		filename: 'file-bundle.js',
@@ -19,7 +19,9 @@ module.exports = {
 				test: /\.jsx$/,
 				loader: 'babel-loader',
 				exclude: /node_modiles/
-			}
+			},
+			{ test: /\.tsx?$/, loader: "ts-loader"},
+			{ test: /\.ts?$/, loader: "ts-loader"}
 		]
 	},
 

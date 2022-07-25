@@ -233,8 +233,7 @@ class File extends React.Component {
 
 			// Reset cell count 
 			this.selected = {};
-			this.b_initial_render = false;
-			for( var i=0; i <= idx; i++) this.selected[i] = false;
+			if(this.b_intitial_render) for( var i=0; i <= idx; i++) this.selected[i] = false;
 		}
 
 		if(idx==0) {
@@ -248,9 +247,9 @@ class File extends React.Component {
 				idx++;
 			}
 		}
-		for( var i=0; i < idx; i++) this.selected[i] = false;
+		if(this.b_initial_render) for( var i=0; i < idx; i++) this.selected[i] = false;
+		this.b_initial_render = false;
 		console.log(this.selected)
-		console.log(cells)
 		return cells;
 	}
 
