@@ -60,7 +60,7 @@ class File extends React.Component {
 
 	componentDidMount() {
 		try {
-			this._fetch_data(WORKING_NOTEBOOK, WORKING_FILE).then( res => {
+			fetch_cells(WORKING_NOTEBOOK, WORKING_FILE).then( res=> {
 				if(Object.keys(res).length > 0) {
 					this.cells.clear();
 					for( const cell in res ) {
@@ -73,12 +73,12 @@ class File extends React.Component {
 			throw Error(error);
 		}
 
-		// Add Interval for backend autosave
+		// Autosave Loop 
 		setInterval( () => {
 			if(this.queue.size() > 0) {
 				for(var i = 0; i <= this.queue.size(); i++) {
 					const request: CellUpdate = this.queue.dequeue();	
-					if( request !== undefined ) {
+					if( typeof(request) !== undefined ) {
 						this._push_data(request);
 					}
 				}
@@ -86,10 +86,6 @@ class File extends React.Component {
 		}, AUTOSAVE)
 	}
 
-	_fetch_data = async (notebook:string, file:string) => {
-		return await fetch_cells(WORKING_FILE);
-	}
-	
 	_push_data = async (data: CellUpdate) => {
 		switch(data.method) {
 			case "POST":
@@ -146,13 +142,16 @@ class File extends React.Component {
 	/* CELL MANAGEMENT 
 	 * ****************************************************/
 
-	_cell_alert_action( method: cell_ui_methods ) {
+	// Callback given as prop to Cell objects
+	_cell_alert_action( method: cell_ui_methods, id: string ) {
 		switch(method) {
 			case CELL_EDIT:
 				// Create CellUpdate and push to Queue
 				break;
 			case CELL_DELETE:
 				// Create CellUpdate and push to Queue
+				// remove from this.cells
+				this.setState({ cells: --this.state.cells });
 				break;
 			case CELL_MOVE_UP:
 				break;
@@ -167,12 +166,51 @@ class File extends React.Component {
 		this.selected[id] = true;
 	}
 	
-	// add cell
-	// remove cell
-	// move cell
+	add_cell() {
+		this.setState({ cells: ++this.state.cells });
+		this.selected[Object.keys(this.selected).length+1] = false;
+		this.cells.push(<Cell />);
+	}
 
 
+	/* HELPERS
+	 * ******************************************************/
+
+	_get_date() {
+		var date: any = new Date();
+		return new_date: string =  date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear()
+	        					           + '@' + date.getHours() + ':' + date.getMinutes()
+	}
 
 
-	// Render
+	/* RENDER
+	 * ******************************************************/
+
+	render() {
+		return(
+			<div className="page">
+				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
+
+				{this.cells}
+
+				<p className="last-edit">{"Last Update: " + this._get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
+				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
+					<img src="" alt="" />
+				</div>
+				{ (this.b_watching) ? this.start_unselect_watch() : this.stop_unselect_watch() }
+
+			</div>
+		)
+	}
 }
+
+
+/* RENDER PAGE
+ *****************************************************************/
+
+const root = ReactDOM.createRoot(
+	document.getElementById('root')
+);
+
+root.render( <File /> );
+
