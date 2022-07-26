@@ -2,13 +2,13 @@
 
 // QUEUE
 
-interface IQueue<T> {
+export interface IQueue<T> {
 	enqueue(item: T): void;
 	dequeue(): T | undefined;
 	size(): number;
 }
 
-class Queue<T> implements IQueue<T> {
+export class Queue<T> implements IQueue<T> {
 	private storage: T[] = [];
 
 	constructor( private capacity: number = Infinity) {}
@@ -35,15 +35,15 @@ class Queue<T> implements IQueue<T> {
    to contain stack within the capacity and allow access to
    newest undo.                                             */
 
-interface IStack<T> {
+export interface IStack<T> {
 	push(item: T): void;
 	pop(): T | undefined;
 	pop_last(): void;
 	size(): number;
 }
 
-class Stack implements IStack<T> {
-	private storage: T[] [];
+export class Stack<T> implements IStack<T> {
+	private storage: T[] = [];
 
 	constructor( private capacity: number = 100 ) {}
 
@@ -67,4 +67,3 @@ class Stack implements IStack<T> {
 	}
 }
 
-export { Queue, Stack };

@@ -10,7 +10,7 @@ import {v4 as uuid } from 'uuid';
 					 computation.												*/
 			
 
-async function fetch_cells(file) {
+async function fetch_cells(notebook, file) {
 	/*
 	fetch('/api/cells/').then(res => res.json()).then( (result) => {
 		return filter_cells(file, result);

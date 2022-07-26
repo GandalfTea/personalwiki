@@ -5,8 +5,8 @@
 // TODO: This class should deal with the text formatting UI
 
 
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import * as React from 'react';
+import * as ReactMarkdown from 'react-markdown';
 
 const STATIC_URL = "../wikiapp/static/";
 const STATIC_IMG_ARROW = IMG_ARROW;
