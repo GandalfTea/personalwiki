@@ -55,7 +55,7 @@ class Cell extends React.Component {
 				<div className='cell-wrapper'>
 					<div className={ `cell ${ this.state.focused ? 'cell-selected' : ''} ${ (this.state.data==='') ? 'cell-empty' : ''}`}
                data-id={this.props.id}
-							 onClick={ this.state.focused ? () => { this.setState({editing: true}); 
+							 onClick={ this.state.focused ? () => { this.setState({ editing: true}); 
 							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }
 							                                : () => this.setState({ focused: true})} >
 						<ReactMarkdown>{this.state.data}</ReactMarkdown>

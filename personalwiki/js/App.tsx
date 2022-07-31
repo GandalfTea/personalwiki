@@ -23,6 +23,7 @@ class File extends React.Component {
 	undo_stack: any;
 	cycles: number;
 	b_watching: boolean;
+	b_selected: boolean;
 	cells: Array<any>;
 	state: any;
 	selected: any;
@@ -44,6 +45,9 @@ class File extends React.Component {
 		// Track whether the File management system is 
 		// watching for clicks to unselect cells
 		this.b_watching = false;
+	
+		// Keep track of wether there are any selected cells
+		this.b_selected = false
 
 		// Hold all Cell objects ready for render
 		// TODO: Maybe find a way to not store all data?
@@ -51,7 +55,7 @@ class File extends React.Component {
 
 		// Initial number of cells.
 		// Will be overwritten from the backend data
-		this.state = { cells: 2, selected: false };
+		this.state = { cells: 2 };
 
 		// Store selected cells for multiple cell manipulation
 		this.selected = {};
@@ -59,10 +63,10 @@ class File extends React.Component {
 
 		// Render the initial number of cells, if DB is empty,
 		// leave them to edit, overwrite with DB if not
-		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action} id={i} key={i} />);
+		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} id={i} key={i} />);
 
 		this.add_cell = this.add_cell.bind(this);
-		this._cell_alert_action = this._cell_alert_action.bind(this);
+		//this._cell_alert_action = this._cell_alert_action.bind(this);
 	}
 
 
@@ -76,7 +80,7 @@ class File extends React.Component {
 					this.cells = [];
 					for( const cell in res ) {
 						this.cells.push( <Cell key={this.state.cells} id={this.state.cells}
-		                               alert_action={this._cell_alert_action} 
+		                               alert_action={this._cell_alert_action.bind(this)} 
 													   />);
 					}
 					this.setState({ cells: Object.keys(res).length });
@@ -159,10 +163,7 @@ class File extends React.Component {
 	_cell_alert_action( method: Core.cell_ui_methods, id: string ) {
 		switch(method) {
 			case Core.cell_ui_methods.CELL_SELECTED:
-
-				// TODO: This should not be a state change
-				console.log(this.setState);
-				this.setState({ selected: true});
+				this.b_selected = true;
 				this.selected[id] = true;
 				break;
 
@@ -187,9 +188,10 @@ class File extends React.Component {
 
 	add_cell() {
 		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
-		                      alert_action={this._cell_alert_action} 
+		                      alert_action={this._cell_alert_action.bind(this)} 
 													/>);
 		// This is stupid, but cells don't render without a new memory reference
+		// TODO: This is taxing if cells scale
 		this.cells = [...this.cells];
 		this.setState({ cells: ++this.state.cells });
 		this.selected[Object.keys(this.selected).length+1] = false;
