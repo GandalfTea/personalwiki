@@ -1,7 +1,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import Cell from './Cell.jsx';
+import Cell from './Cell';
 import PageHeader from './PageHeader.jsx';
 
 import * as Core from './include';
@@ -72,7 +72,11 @@ class File extends React.Component {
 				if(Object.keys(res).length > 0) {
 					this.cells = [];
 					for( const cell in res ) {
-						this.cells.push( <Cell />);
+						this.cells.push( <Cell key={this.state.cells} id={this.state.cells}
+		                      action_alert={this._cell_alert_action} 
+													alert_selected={this._cell_alert_selected}
+													selected={ (this.selected[this.state.cells]) ? 'cell-selected' : ''}
+													/>);
 					}
 					this.setState({ cells: Object.keys(res).length });
 				}
@@ -175,9 +179,13 @@ class File extends React.Component {
 	}
 	
 	add_cell() {
+		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
+		                      update_callback={this._cell_alert_action} 
+													alert_selected={this._cell_alert_selected}
+													selected={ (this.selected[this.state.cells]) ? 'cell-selected' : ''}
+													/>);
 		this.setState({ cells: ++this.state.cells });
 		this.selected[Object.keys(this.selected).length+1] = false;
-		this.cells.push(<Cell />);
 	}
 
 

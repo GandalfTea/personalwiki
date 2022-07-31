@@ -36,18 +36,16 @@ class Cell extends React.Component {
 		if(this.state.focused) {
 
 			// Cell is focused.
-			// On blur, copy the text to state to render
 			return(
 				<div className={ (this.state.data=="") ? 'cell cell-input cell-selected cell-empty' : 'cell cell-input cell-selected'} 
 						 contentEditable tabIndex='0' ref={this.cell_text} 
 						 data-id={ this.id }
 						 onBlur={ () => {
 								this.setState({focused: false})
-	
 								this.setState({ data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
 
-								// Update ledger on File parent class
-								this.props.update_callback(this.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
+								// TODO: Implement TYPES
+								//this.props.update_callback(this.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
 	
 								this.cell_text.current.innerText = "";
 	

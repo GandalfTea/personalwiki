@@ -3,7 +3,12 @@
 	"compilerOptions": {
 		"outDir": "./wikiapp/static/",
 		"allowJs": true,
-		"target": "es5"
+		"target": "es5",
+		"jsx": "react",
+		"lib": [
+			"dom",
+			"ES2021.String"
+		]
 	},
-	"include": ["./js/**/**"]
+	"include": ["./js/**/*"]
 }
