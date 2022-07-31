@@ -51,15 +51,18 @@ class File extends React.Component {
 
 		// Initial number of cells.
 		// Will be overwritten from the backend data
-		this.state = { cells: 2 }
+		this.state = { cells: 2, selected: false };
 
 		// Store selected cells for multiple cell manipulation
 		this.selected = {};
-		for( var i = 0; i <= this.state.cells; i++) this.selected[i] = false;
+		for( var i = 0; i < this.state.cells; i++) this.selected[i] = false;
 
 		// Render the initial number of cells, if DB is empty,
 		// leave them to edit, overwrite with DB if not
-		for(var i = 0; i <= this.state.cells; i++) this.cells.push(<Cell />);
+		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action} id={i} key={i} />);
+
+		this.add_cell = this.add_cell.bind(this);
+		this._cell_alert_action = this._cell_alert_action.bind(this);
 	}
 
 
@@ -73,10 +76,8 @@ class File extends React.Component {
 					this.cells = [];
 					for( const cell in res ) {
 						this.cells.push( <Cell key={this.state.cells} id={this.state.cells}
-		                      action_alert={this._cell_alert_action} 
-													alert_selected={this._cell_alert_selected}
-													selected={ (this.selected[this.state.cells]) ? 'cell-selected' : ''}
-													/>);
+		                               alert_action={this._cell_alert_action} 
+													   />);
 					}
 					this.setState({ cells: Object.keys(res).length });
 				}
@@ -157,33 +158,39 @@ class File extends React.Component {
 	// Callback given as prop to Cell objects
 	_cell_alert_action( method: Core.cell_ui_methods, id: string ) {
 		switch(method) {
+			case Core.cell_ui_methods.CELL_SELECTED:
+
+				// TODO: This should not be a state change
+				console.log(this.setState);
+				this.setState({ selected: true});
+				this.selected[id] = true;
+				break;
+
 			case Core.cell_ui_methods.CELL_EDIT:
 				// Create CellUpdate and push to Queue
 				break;
+
 			case Core.cell_ui_methods.CELL_DELETE:
 				// Create CellUpdate and push to Queue
 				// remove from this.cells
-				this.setState({ cells: --this.state.cells });
+				//this.setState({ cells: --this.state.cells });
 				break;
+
 			case Core.cell_ui_methods.CELL_MOVE_UP:
 				break;
 			case Core.cell_ui_methods.CELL_MOVE_DOWN:
 				break;
 			default:
-				throw Error("Unknown method in '_cell_alert_actino': ${method}");
+				throw Error("Unknown method in '_cell_alert_action': ${method}");
 		}
 	}
 
-	_cell_alert_selected( id: number ) {
-		this.selected[id] = true;
-	}
-	
 	add_cell() {
 		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
-		                      update_callback={this._cell_alert_action} 
-													alert_selected={this._cell_alert_selected}
-													selected={ (this.selected[this.state.cells]) ? 'cell-selected' : ''}
+		                      alert_action={this._cell_alert_action} 
 													/>);
+		// This is stupid, but cells don't render without a new memory reference
+		this.cells = [...this.cells];
 		this.setState({ cells: ++this.state.cells });
 		this.selected[Object.keys(this.selected).length+1] = false;
 	}
@@ -202,11 +209,16 @@ class File extends React.Component {
 		this.selected[id] = true;
 	}
 
+	componentDidUpdate() {
+		this.cycles++;
+	}
 
 	/* RENDER
 	 * ******************************************************/
 
+
 	render() {
+
 		return(
 			<div className="page">
 				<>

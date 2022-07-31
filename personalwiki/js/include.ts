@@ -1,6 +1,7 @@
 
 
 export enum cell_ui_methods {
+	CELL_SELECTED,
 	CELL_EDIT,
 	CELL_MOVE_UP,
 	CELL_MOVE_DOWN,
