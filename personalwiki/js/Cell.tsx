@@ -64,7 +64,7 @@ class Cell extends React.Component {
 							 onClick={ this.state.focused ? () => this.setState({ editing: true}) 
 							                              : () => { this.setState({ focused: true}); 
 							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }}>
-						<MarkdownRender source={this.state.data}></MarkdownRender>
+						<MarkdownRender children={this.state.data}></MarkdownRender>
 					</div>
 					<div className='cell-selected-options'>
 						<button type='button' onClick={ () => console.log('UP')}><img src={IMG_ARROW} alt='move cell up' /></button>
