@@ -1,9 +1,16 @@
 
-import React from 'react';
+//import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import MathJax from 'react-mathjax';
 import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
+//import rehypeKatex from 'rehype-katex';
+
+/*
+	Markdown Object renders Markdown Syntax and LaTeX
+	
+	For now, div and span are used instead of the original <math> 
+	and <inlineMath> HTML objects.
+*/
 
 function MarkdownRender(props) {
 	const newProps = {

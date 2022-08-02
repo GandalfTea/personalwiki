@@ -1,6 +1,10 @@
 
+.cell p {
+	margin-top: 1em;
+}
+
 .cell {
-	font-size: 12px;
+	font-size: 13px;
 	line-height: 20px;
 }
 
