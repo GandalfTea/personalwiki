@@ -29,8 +29,9 @@ pip installed by the script in case you don't already have them.
 ### Versions
 
 #### 0.1
-This prototype version focuses only on the Cell functionality. Front end is done in React.js featuring cell selection and modification with Markdown / LaTeX rendering and editing. Data is served through a REST API. The backend is a Django WSGI webserver with a sqlite relational database. The model is:
+This prototype version focuses only on the Cell functionality. Front-end is done in React.js and TypeScript, featuring cell selection, modification and rendering with Markdown and LaTeX ( react-markdown and MathJax ). Data is served through a REST API. Modifications are sorted using a custom CellUpdate data type and queued for posting. The backend is a Django WSGI webserver with a SQLite database. The model is:
 
+<!--
 ```python
 class Notebook(models.Model):
     title = models.CharField(max_length=120)
@@ -45,7 +46,7 @@ class Cell(models.Model):
     uhash = models.CharField(max_length=120, default="NULL")
 ```
 The primary key is the uuid, and the views also serve instances from uuid
-
+-->
 &nbsp;
 
 #### 0.2
