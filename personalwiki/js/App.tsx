@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 /*	GLOBAL VARIABLES	*/
 
 const WORKING_NOTEBOOK: string = "Demo Notebook";
-const WORKING_FILE: string = "Demo File Title";
+const WORKING_FILE: string = "Quantum Half-Spin";
 const STATIC_URL: string = "../wikiapp/static/";
 const AUTOSAVE: number = 5000; // 5 seconds 
 
@@ -24,6 +24,7 @@ class File extends React.Component {
 	cycles: number;
 	b_watching: boolean;
 	b_selected: boolean;
+	b_yield_focus: boolean;
 	cells: Array<any>;
 	state: any;
 	selected: any;
@@ -49,6 +50,9 @@ class File extends React.Component {
 		// Keep track of wether there are any selected cells
 		this.b_selected = false
 
+		// Request deselect from all cells
+		this.b_yield_focus = false;
+
 		// Hold all Cell objects ready for render
 		// TODO: Maybe find a way to not store all data?
 		this.cells = [];
@@ -63,10 +67,13 @@ class File extends React.Component {
 
 		// Render the initial number of cells, if DB is empty,
 		// leave them to edit, overwrite with DB if not
-		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} id={i} key={i} />);
+		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} 
+		                                                                id={i} key={i} 
+													                                          yield_focus={ this.alert_unselect_yield.bind(this) }
+																																		/>);
 
 		this.add_cell = this.add_cell.bind(this);
-		//this._cell_alert_action = this._cell_alert_action.bind(this);
+		this._cell_unselect_watch = this._cell_unselect_watch.bind(this);
 	}
 
 
@@ -81,6 +88,7 @@ class File extends React.Component {
 					for( const cell in res ) {
 						this.cells.push( <Cell key={this.state.cells} id={this.state.cells}
 		                               alert_action={this._cell_alert_action.bind(this)} 
+													         yield_focus={ this.alert_unselect_yield.bind(this) }
 													   />);
 					}
 					this.setState({ cells: Object.keys(res).length });
@@ -139,7 +147,7 @@ class File extends React.Component {
 
 		// Note: Should it stay selected when you add another cell?
 		if( e.target.className == 'add-cell-button') return; 
-		else if ( this.cycles > 1 ) {
+		else if ( this.cycles > 0 ) {
 
 			// select_cell here only handles the File object selection,
 			// the click itself handles the internall Cell selection
@@ -148,10 +156,20 @@ class File extends React.Component {
 		}
 	}
 
+	// Alert Cells to Unselect when unselecting all
+	alert_unselect_yield() {
+		return this.b_yield_focus;
+	}
+
+
 	_deselect_all_cells() {
 		for(var i = 0; i <= this.state.cells; i++) {
 			this.selected[i] = false;
 		}
+		this.b_yield_focus = true;
+		this.b_selected = false;
+		this.cells = [...this.cells];
+		this.setState({cells: this.state.cells});
 	}
 
 
@@ -165,6 +183,7 @@ class File extends React.Component {
 			case Core.cell_ui_methods.CELL_SELECTED:
 				this.b_selected = true;
 				this.selected[id] = true;
+				this.setState({cells: this.state.cells});
 				break;
 
 			case Core.cell_ui_methods.CELL_EDIT:
@@ -174,21 +193,24 @@ class File extends React.Component {
 			case Core.cell_ui_methods.CELL_DELETE:
 				// Create CellUpdate and push to Queue
 				// remove from this.cells
-				//this.setState({ cells: --this.state.cells });
 				break;
 
 			case Core.cell_ui_methods.CELL_MOVE_UP:
 				break;
 			case Core.cell_ui_methods.CELL_MOVE_DOWN:
 				break;
+
+			case Core.cell_data_methods.CELL_PATCH:
+				break;
 			default:
-				throw Error("Unknown method in '_cell_alert_action': ${method}");
+				throw Error(`Unknown method in '_cell_alert_action': ${method}`);
 		}
 	}
 
 	add_cell() {
 		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
 		                      alert_action={this._cell_alert_action.bind(this)} 
+													yield_focus={ this.alert_unselect_yield.bind(this) }
 													/>);
 		// This is stupid, but cells don't render without a new memory reference
 		// TODO: This is taxing if cells scale
@@ -213,17 +235,20 @@ class File extends React.Component {
 
 	componentDidUpdate() {
 		this.cycles++;
+		console.log(`REDRAW ${this.cycles}`)
+		this.b_yield_focus=false;
 	}
+
+
 
 	/* RENDER
 	 * ******************************************************/
 
-
 	render() {
-
 		return(
 			<div className="page">
 				<>
+				{console.log(this.b_yield_focus)}
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
 
 				{this.cells}
@@ -232,9 +257,9 @@ class File extends React.Component {
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<img src="" alt="" />
 				</div>
-				{ (this.b_watching) ? this.start_unselect_watch() : this.stop_unselect_watch() }
-				</>
 
+				{ (this.b_selected) ? this.start_unselect_watch() : this.stop_unselect_watch() }
+				</>
 			</div>
 		)
 	}

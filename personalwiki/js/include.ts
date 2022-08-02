@@ -8,7 +8,7 @@ export enum cell_ui_methods {
 	CELL_DELETE
 };
 
-export enum cell_data_method {
+export enum cell_data_methods {
 	POST,
 	PATCH,
 	DELETE

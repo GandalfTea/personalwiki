@@ -3,6 +3,7 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 
 import * as Core from './include';
+import MarkdownRender from './MarkdownRender';
 
 const STATIC_URL = "../wikiapp/static/";
 const STATIC_IMG_ARROW = IMG_ARROW;
@@ -22,7 +23,11 @@ class Cell extends React.Component {
 		this.cell_text = React.createRef();
 	}
 
-	componentDidUpdate() { if(this.state.editing) this.cell_text.current.focus(); }
+	componentDidUpdate() { 
+		if(this.state.editing) this.cell_text.current.focus(); 
+		if( this.state.focused && this.props.yield_focus() ) this.setState({ focused: false });
+		console.log(`YIELDING: ${this.props.yield_focus()} : ${this.state.focused}`)
+	}
 
 	componentDidMount() {
 		if(this.props.data != null && !this.b_update_from_fetch) {
@@ -36,13 +41,13 @@ class Cell extends React.Component {
 
 			// INPUT MODE
 			return(
-				<div className={ `cell cell-input ${(this.state.data==='') ? 'cell-empty' : ''}` }
+				<div className={ `cell cell-input ${(this.state.data==='') ? 'cell-empty' : '' }` }
              contentEditable
 						 tabIndex={0}
 						 ref={this.cell_text}
 						 onBlur={ () => {
              	this.setState({focused: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-							//this.action_alert()	// Send PATCH signal to parent object
+							this.props.alert_action( Core.cell_data_methods.CELL_PATCH, this.props.id );	// Send PATCH signal to parent object
 							this.cell_text.current.innerText = '';
 						 }}>
 					{this.state.data.replaceAll('\n\n', '\r\n')}
@@ -53,12 +58,13 @@ class Cell extends React.Component {
 			// VIEW MODE
 			return(
 				<div className='cell-wrapper'>
-					<div className={ `cell ${ this.state.focused ? 'cell-selected' : ''} ${ (this.state.data==='') ? 'cell-empty' : ''}`}
+					{ console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)}
+					<div className={ `cell ${ this.state.focused ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
                data-id={this.props.id}
-							 onClick={ this.state.focused ? () => { this.setState({ editing: true}); 
-							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }
-							                                : () => this.setState({ focused: true})} >
-						<ReactMarkdown>{this.state.data}</ReactMarkdown>
+							 onClick={ this.state.focused ? () => this.setState({ editing: true}) 
+							                              : () => { this.setState({ focused: true}); 
+							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }}>
+						<MarkdownRender source={this.state.data}></MarkdownRender>
 					</div>
 					<div className='cell-selected-options'>
 						<button type='button' onClick={ () => console.log('UP')}><img src={IMG_ARROW} alt='move cell up' /></button>
