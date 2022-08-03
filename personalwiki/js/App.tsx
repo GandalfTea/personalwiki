@@ -73,6 +73,7 @@ class File extends React.Component {
 																																		/>);
 
 		this.add_cell = this.add_cell.bind(this);
+		this.move_cell = this.move_cell.bind(this);
 		this._cell_unselect_watch = this._cell_unselect_watch.bind(this);
 	}
 
@@ -178,7 +179,8 @@ class File extends React.Component {
 	 * ****************************************************/
 
 	// Callback given as prop to Cell objects
-	_cell_alert_action( method: Core.cell_ui_methods, id: string ) {
+	_cell_alert_action( method: Core.cell_ui_methods | Core.cell_data_methods, id: string ) {
+
 		switch(method) {
 			case Core.cell_ui_methods.CELL_SELECTED:
 				this.b_selected = true;
@@ -186,22 +188,30 @@ class File extends React.Component {
 				this.setState({cells: this.state.cells});
 				break;
 
-			case Core.cell_ui_methods.CELL_EDIT:
-				// Create CellUpdate and push to Queue
-				break;
-
-			case Core.cell_ui_methods.CELL_DELETE:
-				// Create CellUpdate and push to Queue
-				// remove from this.cells
-				break;
-
 			case Core.cell_ui_methods.CELL_MOVE_UP:
+				this.move_cell(parseInt(id), parseInt(id)-1)
+				console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)-1}`);
 				break;
 			case Core.cell_ui_methods.CELL_MOVE_DOWN:
+				this.move_cell(parseInt(id), parseInt(id)+1)
+				console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)+1}`);
 				break;
 
-			case Core.cell_data_methods.CELL_PATCH:
+			case Core.cell_data_methods.DELETE:
+			case Core.cell_data_methods.PATCH:
+			case Core.cell_data_methods.POST:
+
+				console.log(`ACTION: METHOD:${method} CELL: ${id}`);
+
+				const request: CellUpdate;
+				request.uuid = null // get uuid
+				request.data = null // get data
+				request.method = method;
+
+				this.queue.enqueue(request);
+
 				break;
+
 			default:
 				throw Error(`Unknown method in '_cell_alert_action': ${method}`);
 		}
@@ -209,7 +219,7 @@ class File extends React.Component {
 
 	add_cell() {
 		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
-		                      alert_action={this._cell_alert_action.bind(this)} 
+		                      alert_action={ this._cell_alert_action.bind(this)} 
 													yield_focus={ this.alert_unselect_yield.bind(this) }
 													/>);
 		// This is stupid, but cells don't render without a new memory reference
@@ -217,6 +227,36 @@ class File extends React.Component {
 		this.cells = [...this.cells];
 		this.setState({ cells: ++this.state.cells });
 		this.selected[Object.keys(this.selected).length+1] = false;
+	}
+
+	move_cell( initPos: number , endPos: number ) {
+
+		if(endPos < 0 || endPos > this.state.cells-1 || initPos === endPos) return;
+
+		// Move in Array with splice
+		const cell: any = this.cells.splice(initPos, 1)[0];
+		this.cells.splice(endPos, 0, cell);
+
+		// Change Data Attribute 
+		var new_cells = [];
+		for( let i: number = 0; i < this.cells.length; i++) {
+			new_cells.push( React.cloneElement(this.cells[i], { 
+				//key:i, 
+				id:i,
+				alert_action:this._cell_alert_action.bind(this),
+				yield_focus:this.alert_unselect_yield.bind(this)
+			}));
+		}
+		this.cells = [...new_cells];
+
+		// Change boolean in selected array
+		// NOTE: For now, any cell other than the moved one will be deselected
+		// In the future, you should be able to move multiple cells at once
+		for(let i: number = 0; i < this.selected.length; i++) this.selected[i] = false;
+		this.selected[endPos] = true;
+		// TODO: Figure out how to send deselect signal to individual cells or send select signal to one.
+
+		this.setState({cells: this.state.cells});
 	}
 
 

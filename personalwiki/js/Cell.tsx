@@ -18,14 +18,14 @@ class Cell extends React.Component {
 	
 	constructor(props) {
 		super(props);
-		this.state = { focused: false, editing: false, data: "" };
+		this.state = { selected: false, editing: false, data: "" };
 		this.b_update_from_fetch = false;
 		this.cell_text = React.createRef();
 	}
 
 	componentDidUpdate() { 
 		if(this.state.editing) this.cell_text.current.focus(); 
-		if( this.state.focused && this.props.yield_focus() ) this.setState({ focused: false });
+		if( this.state.selected && this.props.yield_focus() ) this.setState({ focused: false });
 		console.log(`YIELDING: ${this.props.yield_focus()} : ${this.state.focused}`)
 	}
 
@@ -34,6 +34,11 @@ class Cell extends React.Component {
 			this.setState({data: this.props.data});
 			this.b_update_from_fetch = true;
 		}
+	}
+
+	// Alert parent File class of incoming actions
+	alert_parent( method: Core.cell_ui_methods | Core.cell_data_methods, id: string ) {
+		this.props.alert_action(method, id);	
 	}
 
 	render() {
@@ -46,8 +51,8 @@ class Cell extends React.Component {
 						 tabIndex={0}
 						 ref={this.cell_text}
 						 onBlur={ () => {
-             	this.setState({focused: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-							this.props.alert_action( Core.cell_data_methods.CELL_PATCH, this.props.id );	// Send PATCH signal to parent object
+             	this.setState({selected: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
+							//this.props.alert_action( Core.cell_data_methods.PATCH, this.props.id );	// Send PATCH signal to parent object
 							this.cell_text.current.innerText = '';
 						 }}>
 					{this.state.data.replaceAll('\n\n', '\r\n')}
@@ -59,17 +64,20 @@ class Cell extends React.Component {
 			return(
 				<div className='cell-wrapper'>
 					{ console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)}
-					<div className={ `cell ${ this.state.focused ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
+					<div className={ `cell ${ this.state.selected ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
                data-id={this.props.id}
-							 onClick={ this.state.focused ? () => this.setState({ editing: true}) 
-							                              : () => { this.setState({ focused: true}); 
+							 onClick={ this.state.selected ? () => this.setState({ editing: true}) 
+							                              : () => { this.setState({ selected: true}); 
 							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }}>
 						<MarkdownRender children={this.state.data}></MarkdownRender>
 					</div>
 					<div className='cell-selected-options'>
-						<button type='button' onClick={ () => console.log('UP')}><img src={IMG_ARROW} alt='move cell up' /></button>
-						<button type='button' onClick={ () => console.log('DOWN')}><img src={IMG_ARROW} alt='move cell down' /></button>
-						<button type='button' onClick={ () => console.log('DEL')}><img src={IMG_TRASH} alt='delete cell' /></button>
+						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_UP, this.props.id)}>
+							<img src={IMG_ARROW} alt='move cell up' /></button>
+						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_DOWN, this.props.id)}>
+							<img src={IMG_ARROW} alt='move cell down' /></button>
+						<button type='button' onClick={ () => this.alert_parent( Core.cell_data_methods.DELETE, this.props.id)}>
+							<img src={IMG_TRASH} alt='delete cell' /></button>
 					</div>
 				</div>
 			)

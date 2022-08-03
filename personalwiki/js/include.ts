@@ -2,16 +2,14 @@
 
 export enum cell_ui_methods {
 	CELL_SELECTED,
-	CELL_EDIT,
 	CELL_MOVE_UP,
 	CELL_MOVE_DOWN,
-	CELL_DELETE
 };
 
 export enum cell_data_methods {
-	POST,
-	PATCH,
-	DELETE
+	POST = 3,
+	PATCH = 4,
+	DELETE = 5
 };
 
 export type CellUpdate = {

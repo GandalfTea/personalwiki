@@ -34,6 +34,7 @@ class MarkdownRender extends React.Component {
 		if( nextProps == this.props ) {
 			return false;
 		}
+		return true;
 	}
 
 	render() {
