@@ -92,8 +92,7 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 }
 
 .cell-selected {
-	border: 1.5px solid #bbb;
-	/* border-left: 10px solid #bbb; */
+	outline: 1.5px solid #bbb;
 }
 
 .cell-empty {
@@ -111,8 +110,8 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	height: 100px;
 	background-color: #e9e9e9;
 	position: absolute;
-	left: 6.7%;
-	top: 1vh;
+	left: 6.6%;
+	top: calc(1vh - 1px);
 
 	display: flex;
 	flex-direction: column;
