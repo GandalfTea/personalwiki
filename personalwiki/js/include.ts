@@ -13,9 +13,9 @@ export enum cell_data_methods {
 };
 
 export type CellUpdate = {
-	method: cell_data_method,
 	uuid: string,
 	data: string | undefined
+	method: cell_data_method,
 };
 
 

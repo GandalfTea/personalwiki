@@ -16,7 +16,7 @@ import { v4 as uuid } from 'uuid';
 const WORKING_NOTEBOOK: string = "Demo Notebook";
 const WORKING_FILE: string = "Quantum Half-Spin";
 const STATIC_URL: string = "../wikiapp/static/";
-const AUTOSAVE: number = 5000; // 5 seconds 
+const AUTOSAVE: number = 10000; // 5 seconds 
 
 class File extends React.Component {
 	queue: any;
@@ -101,6 +101,7 @@ class File extends React.Component {
 
 		// Autosave Loop 
 		setInterval( () => {
+			console.log(`\nAUTOSAVE`);
 			if(this.queue.size() > 0) {
 				for(var i = 0; i <= this.queue.size(); i++) {
 					const request: Core.CellUpdate = this.queue.dequeue();	
@@ -114,11 +115,14 @@ class File extends React.Component {
 
 	_push_data = async (data: Core.CellUpdate) => {
 		switch(data.method) {
-			case Core.cell_data_method.POST:
+			case Core.cell_data_methods.POST:
+				console.log('%cPOST' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
 				break;
-			case Core.cell_data_method.DELETE:
+			case Core.cell_data_methods.DELETE:
+				console.log('%cDELETE' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
 				break;
-			case Core.cell_data_method.PATCH:
+			case Core.cell_data_methods.PATCH:
+				console.log('%cPATCH' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
 				break;
 			default:
 		}
@@ -190,26 +194,25 @@ class File extends React.Component {
 
 			case Core.cell_ui_methods.CELL_MOVE_UP:
 				this.move_cell(parseInt(id), parseInt(id)-1)
-				console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)-1}`);
+				//console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)-1}`);
 				break;
 			case Core.cell_ui_methods.CELL_MOVE_DOWN:
 				this.move_cell(parseInt(id), parseInt(id)+1)
-				console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)+1}`);
+				//console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)+1}`);
 				break;
 
 			case Core.cell_data_methods.DELETE:
 			case Core.cell_data_methods.PATCH:
 			case Core.cell_data_methods.POST:
-
 				console.log(`ACTION: METHOD:${method} CELL: ${id}`);
-
-				const request: CellUpdate;
-				request.uuid = null // get uuid
-				request.data = null // get data
-				request.method = method;
-
+				// TODO: Get real data from DOM
+				const request: CellUpdate = {
+					uuid: uuid(),
+					data: "DEMO PACKAGE DATA",
+					method: method,
+				};
 				this.queue.enqueue(request);
-
+				console.log(this.queue);
 				break;
 
 			default:
@@ -233,7 +236,7 @@ class File extends React.Component {
 
 		if(endPos < 0 || endPos > this.state.cells-1 || initPos === endPos) return;
 
-		// Move in Array with splice
+		// Move in Array
 		const cell: any = this.cells.splice(initPos, 1)[0];
 		this.cells.splice(endPos, 0, cell);
 
@@ -249,7 +252,7 @@ class File extends React.Component {
 		}
 		this.cells = [...new_cells];
 
-		// Change boolean in selected array
+		// TODO: Change boolean in selected array
 		// NOTE: For now, any cell other than the moved one will be deselected
 		// In the future, you should be able to move multiple cells at once
 		for(let i: number = 0; i < this.selected.length; i++) this.selected[i] = false;
