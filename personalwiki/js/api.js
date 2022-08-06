@@ -41,19 +41,18 @@ function handle_cell_fetch_failure(error) {
 	console.log("OOPSIE, there was a problem >.<");
 }
 
-async function post_cell_update(cell) {
+async function post_cell_update(uuid, data) {
 	var xhr = new XMLHttpRequest();
-	const new_id = uuid();
-	xhr.open("PUT", "http://localhost:8000/api/cell/" + new_id , true);
+	xhr.open("PUT", "http://localhost:8000/api/cell/" + uuid , true);
 	xhr.setRequestHeader("Content-Type", 'application/json');
-	xhr.send(JSON.stringify(cell));
+	xhr.send(JSON.stringify(data));
 }
 
-async function delete_cell(cell) {
+async function delete_cell(uuid, data) {
 	var xhr = new XMLHttpRequest();
-	xhr.open("DELETE", "http://localhost:8000/api/cell/" + cell.uuid , true);
+	xhr.open("DELETE", "http://localhost:8000/api/cell/" + uuid , true);
 	xhr.setRequestHeader("Content-Type", 'application/json');
-	xhr.send(JSON.stringify(cell));
+	xhr.send(JSON.stringify(data));
 }
 
 export { fetch_cells, post_cell_update, delete_cell };

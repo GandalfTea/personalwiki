@@ -21,6 +21,11 @@ class Cell extends React.Component {
 		this.state = { selected: false, editing: false, data: "" };
 		this.b_update_from_fetch = false;
 		this.cell_text = React.createRef();
+		
+		// Data recieved from the DB
+		if( this.props.data != undefined ) {
+			this.setState({data: this.props.data});
+		}
 	}
 
 	componentDidUpdate() { 
@@ -49,10 +54,12 @@ class Cell extends React.Component {
 				<div className={ `cell cell-input ${(this.state.data==='') ? 'cell-empty' : '' }` }
              contentEditable
 						 tabIndex={0}
+             data-id={this.props.id}
+						 data-uuid={this.props.uuid}
 						 ref={this.cell_text}
 						 onBlur={ () => {
              	this.setState({selected: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-							//this.props.alert_action( Core.cell_data_methods.PATCH, this.props.id );	// Send PATCH signal to parent object
+							this.props.alert_action( Core.cell_data_methods.POST, this.props.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
 							this.cell_text.current.innerText = '';
 						 }}>
 					{this.state.data.replaceAll('\n\n', '\r\n')}
@@ -66,6 +73,7 @@ class Cell extends React.Component {
 					{ console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)}
 					<div className={ `cell ${ this.state.selected ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
                data-id={this.props.id}
+							 data-uuid={this.props.uuid}
 							 onClick={ this.state.selected ? () => this.setState({ editing: true}) 
 							                              : () => { this.setState({ selected: true}); 
 							                                        this.props.alert_action( Core.cell_ui_methods.CELL_SELECTED, this.props.id ); }}>

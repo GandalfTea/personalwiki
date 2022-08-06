@@ -16,7 +16,7 @@ import { v4 as uuid } from 'uuid';
 const WORKING_NOTEBOOK: string = "Demo Notebook";
 const WORKING_FILE: string = "Quantum Half-Spin";
 const STATIC_URL: string = "../wikiapp/static/";
-const AUTOSAVE: number = 10000; // 5 seconds 
+const AUTOSAVE: number = 1000; // 1 seconds 
 
 class File extends React.Component {
 	queue: any;
@@ -70,11 +70,13 @@ class File extends React.Component {
 		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} 
 		                                                                id={i} key={i} 
 													                                          yield_focus={ this.alert_unselect_yield.bind(this) }
+																																		uuid={ uuid() }
 																																		/>);
 
 		this.add_cell = this.add_cell.bind(this);
 		this.move_cell = this.move_cell.bind(this);
 		this._cell_unselect_watch = this._cell_unselect_watch.bind(this);
+		this._push_data = this._push_data.bind(this);
 	}
 
 
@@ -87,9 +89,11 @@ class File extends React.Component {
 				if(Object.keys(res).length > 0) {
 					this.cells = [];
 					for( const cell in res ) {
-						this.cells.push( <Cell key={this.state.cells} id={this.state.cells}
+						this.cells.push( <Cell key={parseInt(cell)} id={parseInt(cell)}
 		                               alert_action={this._cell_alert_action.bind(this)} 
 													         yield_focus={ this.alert_unselect_yield.bind(this) }
+																	 data={ res[cell].data }
+																	 uuid={ res[cell].uuid }
 													   />);
 					}
 					this.setState({ cells: Object.keys(res).length });
@@ -101,7 +105,6 @@ class File extends React.Component {
 
 		// Autosave Loop 
 		setInterval( () => {
-			console.log(`\nAUTOSAVE`);
 			if(this.queue.size() > 0) {
 				for(var i = 0; i <= this.queue.size(); i++) {
 					const request: Core.CellUpdate = this.queue.dequeue();	
@@ -116,10 +119,22 @@ class File extends React.Component {
 	_push_data = async (data: Core.CellUpdate) => {
 		switch(data.method) {
 			case Core.cell_data_methods.POST:
+
+				// TODO: In order to post updates, the program needs to detect changed cells
 				console.log('%cPOST' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				post_cell_update(data.uuid, data.data);
 				break;
 			case Core.cell_data_methods.DELETE:
 				console.log('%cDELETE' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				await delete_cell(data.uuid, data.data);
+
+				const idx: number = this.cells.findIndex( obj => { 
+						return obj.props.id == parseInt(document.querySelector(`[data-uuid='${data.uuid}']`).dataset.id)
+				});
+				console.log(idx)
+				this.cells.splice(idx, 1)[0];
+				this.cells = [...this.cells];
+				this.setState({cells: this.state.cells})
 				break;
 			case Core.cell_data_methods.PATCH:
 				console.log('%cPATCH' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
@@ -183,7 +198,7 @@ class File extends React.Component {
 	 * ****************************************************/
 
 	// Callback given as prop to Cell objects
-	_cell_alert_action( method: Core.cell_ui_methods | Core.cell_data_methods, id: string ) {
+	_cell_alert_action( method: Core.cell_ui_methods | Core.cell_data_methods, id: string, data?: string ) {
 
 		switch(method) {
 			case Core.cell_ui_methods.CELL_SELECTED:
@@ -201,18 +216,17 @@ class File extends React.Component {
 				//console.log(`ACTION: METHOD:${method} CELL: ${id} MOVING TO: ${parseInt(id)+1}`);
 				break;
 
+			case Core.cell_data_methods.POST:
 			case Core.cell_data_methods.DELETE:
 			case Core.cell_data_methods.PATCH:
-			case Core.cell_data_methods.POST:
+
 				console.log(`ACTION: METHOD:${method} CELL: ${id}`);
-				// TODO: Get real data from DOM
 				const request: CellUpdate = {
-					uuid: uuid(),
-					data: "DEMO PACKAGE DATA",
+					uuid: document.querySelector(`[data-id='${id}']`).dataset.uuid, 
+					data: data,
 					method: method,
 				};
 				this.queue.enqueue(request);
-				console.log(this.queue);
 				break;
 
 			default:
@@ -224,6 +238,7 @@ class File extends React.Component {
 		this.cells.push(<Cell key={this.state.cells} id={this.state.cells}
 		                      alert_action={ this._cell_alert_action.bind(this)} 
 													yield_focus={ this.alert_unselect_yield.bind(this) }
+													uuid={ uuid() }
 													/>);
 		// This is stupid, but cells don't render without a new memory reference
 		// TODO: This is taxing if cells scale

@@ -12,9 +12,14 @@ export enum cell_data_methods {
 	DELETE = 5
 };
 
-export type CellUpdate = {
+// TODO: Maybe add UHash?
+export type Cell = {
 	uuid: string,
-	data: string | undefined
+	data: string | undefined,
+}
+
+export type CellUpdate = {
+	cell: Cell,
 	method: cell_data_method,
 };
 

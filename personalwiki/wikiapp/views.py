@@ -9,6 +9,8 @@ from wikiapp.models import Cell, File, Notebook
 
 from django.shortcuts import get_object_or_404
 
+import uuid
+
 class CellViewSet(viewsets.ModelViewSet):
     serializer_class = CellSerializer
     queryset = Cell.objects.all()
@@ -26,28 +28,30 @@ class NotebookViewSet(viewsets.ModelViewSet):
 @api_view(['GET', 'PUT', 'DELETE'])
 def CellView(request, pk):
 
+    if request.method == 'PUT':
+        cell = Cell(pk, request.data)
+        data = { 'uuid': str(pk), 'data': request.data, 'uhash': 'aa'}
+        serializer = CellSerializer(cell, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response( serializer.data, status = status.HTTP_201_CREATED )
+        print(serializer.errors, end='\n\n')
+        return Response( serializer.errors, status=status.HTTP_400_BAD_REQUEST )
+
     try:
         cell = Cell.objects.get(pk=pk);
     except Cell.DoesNotExist:
-        
         cells = Cell.objects.all()
+        cell = 1
         for i in cells:
             if(i.pk == pk):
                 cell = i
-        #return Response(status=status.HTTP_404_NOT_FOUND)
+        if cell == 1: 
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
         serializer = CellSerializer(cell)
         return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = CellSerializer(cell, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response( serializer.data, status = status.HTTP_201_CREATED )
-        print(serializer.errors)
-        print("\n\n")
-        return Response( serializer.errors, status=status.HTTP_400_BAD_REQUEST )
 
     elif request.method == 'DELETE':
         #Cell.objects.filter(pk=request.data['uuid']).delete()
