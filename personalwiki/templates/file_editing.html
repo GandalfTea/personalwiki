@@ -15,8 +15,15 @@
 
 	<body>
 		<div id="root"></div>
+
+		<!-- Static images import in JS  -->
+		<script>
+			const IMG_ARROW = "{% static 'assets/up.svg' %}"
+			const IMG_TRASH = "{% static 'assets/trash.svg'%}"
+		</script>
+
 		<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    		<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 		<script src="{% static 'file-bundle.js' %}"></script>
 	</body>
 </html>

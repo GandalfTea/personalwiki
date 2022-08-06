@@ -1,4 +1,5 @@
 
+import {v4 as uuid } from 'uuid';
 
 /*
 	Define functions to fetch the cells, files 
@@ -9,7 +10,7 @@
 					 computation.												*/
 			
 
-async function fetch_cells(file) {
+async function fetch_cells(notebook, file) {
 	/*
 	fetch('/api/cells/').then(res => res.json()).then( (result) => {
 		return filter_cells(file, result);
@@ -22,7 +23,8 @@ async function fetch_cells(file) {
 
 	const res = await fetch('/api/cells/');
 	const json = await res.json();
-	return filter_cells(file, json);
+	//return filter_cells(file, json);
+	return json;
 }
 
 function filter_cells(file, cells) {
@@ -39,4 +41,19 @@ function handle_cell_fetch_failure(error) {
 	console.log("OOPSIE, there was a problem >.<");
 }
 
-export default fetch_cells;
+async function post_cell_update(uuid, data) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("PUT", "http://localhost:8000/api/cell/" + uuid , true);
+	xhr.setRequestHeader("Content-Type", 'application/json');
+	xhr.send(JSON.stringify(data));
+}
+
+async function delete_cell(uuid, data) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("DELETE", "http://localhost:8000/api/cell/" + uuid , true);
+	xhr.setRequestHeader("Content-Type", 'application/json');
+	xhr.send(JSON.stringify(data));
+}
+
+export { fetch_cells, post_cell_update, delete_cell };
+

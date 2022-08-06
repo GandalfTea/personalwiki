@@ -22,9 +22,18 @@
     "webpack-dev-server": "^4.9.2"
   },
   "dependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
     "fs": "0.0.1-security",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.3"
+    "react-katex": "^2.0.2",
+    "react-markdown": "^8.0.3",
+    "react-mathjax": "^1.0.1",
+    "rehype-katex": "^6.0.2",
+    "remark-math": "^5.1.1",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
+    "uuid": "^8.3.2"
   }
 }
