@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 /*	GLOBAL VARIABLES	*/
 
 const WORKING_NOTEBOOK: string = "Demo Notebook";
-const WORKING_FILE: string = "Quantum Half-Spin";
+const WORKING_FILE: string = "Computer Memory Basics";
 const STATIC_URL: string = "../wikiapp/static/";
 const AUTOSAVE: number = 1000; // 1 seconds 
 
@@ -309,7 +309,7 @@ class File extends React.Component {
 			<div className="page">
 				<>
 				{console.log(this.b_yield_focus)}
-				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
+				<PageHeader address="Professional C++ / Chapter 10 / Advanced Inheritence Techniques" title={WORKING_FILE} />
 
 				{this.cells}
 

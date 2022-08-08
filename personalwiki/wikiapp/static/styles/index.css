@@ -18,7 +18,8 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 .page {
 	position: relative;
 	width: 900px;
-	height: 200vh;
+	height: auto;
+	min-height: 100vh;
 	margin: auto;
 	margin-top: 20vh;
 	background-color: white;
@@ -32,7 +33,7 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 .page_header {
 	width: 80%;
 	margin: auto;
-	margin-top: 10vh;
+	margin-top: 15vh;
 	margin-bottom: 5vh;
 }
 

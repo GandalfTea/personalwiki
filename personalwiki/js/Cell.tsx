@@ -21,17 +21,15 @@ class Cell extends React.Component {
 		super(props);
 		this.state = { selected: false, editing: false, data: "" };
 
-		// Initial update of cells from DB after loading page
-		this.b_update_from_fetch = false;
-
 		// Make initial request a POST and subsequent requests PATCH
 		// If updated from fetch, make all requests PATCH
 		this.b_initial_post = (this.b_update_from_fetch) ? false : true;
 
+		this.b_update_from_fetch = false;
 		this.cell_text = React.createRef();
 		
 		// Data recieved from the DB
-		if( this.props.data != undefined ) {
+		if( this.props.data != undefined && this.props.data !='' ) {
 			this.setState({data: this.props.data});
 		}
 	}
@@ -39,15 +37,15 @@ class Cell extends React.Component {
 	componentDidUpdate() { 
 		if(this.state.editing) this.cell_text.current.focus(); 
 		if( this.state.selected && this.props.yield_focus() ) this.setState({ focused: false });
-		console.log(`YIELDING: ${this.props.yield_focus()} : ${this.state.focused}`)
-	}
+		//console.log(`YIELDING: ${this.props.yield_focus()} : ${this.state.focused}`)
 
-	componentDidMount() {
-		if(this.props.data != null && !this.b_update_from_fetch) {
+		if(this.props.data != undefined && !this.b_update_from_fetch ) {
 			this.setState({data: this.props.data});
+			// TODO: Update is too fast and nothing gets printed
 			this.b_update_from_fetch = true;
 		}
 	}
+
 
 	// Alert parent File class of incoming actions
 	alert_parent( method: Core.cell_ui_methods | Core.cell_data_methods, id: string ) {
@@ -81,7 +79,7 @@ class Cell extends React.Component {
 			// VIEW MODE
 			return(
 				<div className='cell-wrapper'>
-					{ console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)}
+					{ /*console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)*/ }
 					<div className={ `cell ${ this.state.selected ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
                data-id={this.props.id}
 							 data-uuid={this.props.uuid}
