@@ -25,7 +25,7 @@ class NotebookViewSet(viewsets.ModelViewSet):
     serializer_class = NotebookSerializer
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def CellView(request, pk):
 
     if request.method == 'PUT':
@@ -48,6 +48,17 @@ def CellView(request, pk):
                 cell = i
         if cell == 1: 
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        cell.data = request.data
+
+        data = { 'uuid': str(pk), 'data': request.data, 'uhash': 'aa'}
+        serializer = CellSerializer(cell, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors, end='\n\n')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'GET':
         serializer = CellSerializer(cell)

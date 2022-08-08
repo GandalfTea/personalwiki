@@ -6,7 +6,7 @@ import PageHeader from './PageHeader.jsx';
 
 import * as Core from './include';
 import { Queue, Stack } from './DataStructures';
-import { fetch_cells, post_cell_update, delete_cell } from './api.js';
+import { fetch_cells, post_cell_update, delete_cell, patch_cell } from './api.js';
 
 import { v4 as uuid } from 'uuid';
 
@@ -119,25 +119,26 @@ class File extends React.Component {
 	_push_data = async (data: Core.CellUpdate) => {
 		switch(data.method) {
 			case Core.cell_data_methods.POST:
-
-				// TODO: In order to post updates, the program needs to detect changed cells
-				console.log('%cPOST' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				console.log('%cPOST' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
 				post_cell_update(data.uuid, data.data);
 				break;
+
 			case Core.cell_data_methods.DELETE:
-				console.log('%cDELETE' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				console.log('%cDELETE' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
 				await delete_cell(data.uuid, data.data);
 
+				// Delete from DOM
 				const idx: number = this.cells.findIndex( obj => { 
 						return obj.props.id == parseInt(document.querySelector(`[data-uuid='${data.uuid}']`).dataset.id)
 				});
-				console.log(idx)
 				this.cells.splice(idx, 1)[0];
 				this.cells = [...this.cells];
 				this.setState({cells: this.state.cells})
 				break;
+
 			case Core.cell_data_methods.PATCH:
-				console.log('%cPATCH' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				console.log('%cPATCH' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
+				patch_cell(data.uuid, data.data);
 				break;
 			default:
 		}
@@ -257,6 +258,7 @@ class File extends React.Component {
 
 		// Change Data Attribute 
 		var new_cells = [];
+		console.log(this.cells)
 		for( let i: number = 0; i < this.cells.length; i++) {
 			new_cells.push( React.cloneElement(this.cells[i], { 
 				//key:i, 

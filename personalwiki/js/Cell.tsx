@@ -14,12 +14,20 @@ class Cell extends React.Component {
 	props: any;
 	state: any;
 	b_update_from_fetch: boolean;
+	b_initial_post: boolean;
 	cell_text: any;
 	
 	constructor(props) {
 		super(props);
 		this.state = { selected: false, editing: false, data: "" };
+
+		// Initial update of cells from DB after loading page
 		this.b_update_from_fetch = false;
+
+		// Make initial request a POST and subsequent requests PATCH
+		// If updated from fetch, make all requests PATCH
+		this.b_initial_post = (this.b_update_from_fetch) ? false : true;
+
 		this.cell_text = React.createRef();
 		
 		// Data recieved from the DB
@@ -59,8 +67,11 @@ class Cell extends React.Component {
 						 ref={this.cell_text}
 						 onBlur={ () => {
              	this.setState({selected: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-							this.props.alert_action( Core.cell_data_methods.POST, this.props.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
+							this.props.alert_action( (this.b_initial_post) ? Core.cell_data_methods.POST
+							                                               : Core.cell_data_methods.PATCH, 
+																				this.props.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
 							this.cell_text.current.innerText = '';
+							if(this.b_initial_post) this.b_initial_post = false;
 						 }}>
 					{this.state.data.replaceAll('\n\n', '\r\n')}
 				</div>
