@@ -5,7 +5,6 @@ import Cell from './Cell';
 import PageHeader from './PageHeader.jsx';
 
 import * as Core from './include';
-import { Queue, Stack } from './DataStructures';
 import { fetch_cells, post_cell_update, delete_cell, patch_cell } from './api.js';
 
 import { v4 as uuid } from 'uuid';
@@ -19,8 +18,9 @@ const STATIC_URL: string = "../wikiapp/static/";
 const AUTOSAVE: number = 1000; // 1 seconds 
 
 class File extends React.Component {
-	queue: any;
-	undo_stack: any;
+
+	queue: CellUpdate[];
+	undo_stack: CellUpdate[];
 	cycles: number;
 	b_watching: boolean;
 	b_selected: boolean;
@@ -33,11 +33,12 @@ class File extends React.Component {
 		super(props);
 		
 		// Use a Queue to store pending changes to the backend
-		this.queue = new Queue<Core.CellUpdate>();
+		this.queue = [];
 
 		// After completing the changes in the Queue
 		// Store the changes in a stack ready for an Undo
-		this.undo_stack = new Stack<Core.CellUpdate>();
+		this.undo_stack = [];
+
 
 		// Keep track of how many times the object re-reders.
 		// Some processes do not run on initial render.
@@ -54,7 +55,6 @@ class File extends React.Component {
 		this.b_yield_focus = false;
 
 		// Hold all Cell objects ready for render
-		// TODO: Maybe find a way to not store all data?
 		this.cells = [];
 
 		// Initial number of cells.
@@ -66,7 +66,6 @@ class File extends React.Component {
 		for( var i = 0; i < this.state.cells; i++) this.selected[i] = false;
 
 		// Render the initial number of cells, if DB is empty,
-		// leave them to edit, overwrite with DB if not
 		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} 
 		                                                                id={i} key={i} 
 													                                          yield_focus={ this.alert_unselect_yield.bind(this) }
@@ -105,9 +104,9 @@ class File extends React.Component {
 
 		// Autosave Loop 
 		setInterval( () => {
-			if(this.queue.size() > 0) {
-				for(var i = 0; i <= this.queue.size(); i++) {
-					const request: Core.CellUpdate = this.queue.dequeue();	
+			if(this.queue.length > 0) {
+				for(var i = 0; i <= this.queue.length; i++) {
+					const request: Core.CellUpdate = this.queue.shift();	
 					if( typeof(request) !== undefined ) {
 						this._push_data(request);
 					}
@@ -227,7 +226,7 @@ class File extends React.Component {
 					data: data,
 					method: method,
 				};
-				this.queue.enqueue(request);
+				this.queue.push(request);
 				break;
 
 			default:
@@ -309,7 +308,7 @@ class File extends React.Component {
 			<div className="page">
 				<>
 				{console.log(this.b_yield_focus)}
-				<PageHeader address="Professional C++ / Chapter 10 / Advanced Inheritence Techniques" title={WORKING_FILE} />
+				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={WORKING_FILE} />
 
 				{this.cells}
 
