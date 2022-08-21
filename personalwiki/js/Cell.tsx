@@ -11,39 +11,26 @@ const STATIC_IMG_TRASH = IMG_TRASH;
 
 class Cell extends React.Component {
 
-	props: any;
-	state: any;
+	props: { key: number, id: number, alert_action: any, yield_focus: any, data: string, uuid: };
+	state: { selected: boolean, editing: boolean, data: string};
 	b_update_from_fetch: boolean;
 	b_initial_post: boolean;
 	cell_text: any;
 	
 	constructor(props) {
 		super(props);
-		this.state = { selected: false, editing: false, data: "" };
+		this.state = { selected: false, editing: false, data: (this.props.data!=undefined && this.props.data!= '') ? this.props.data : "" };
 
 		// Make initial request a POST and subsequent requests PATCH
 		// If updated from fetch, make all requests PATCH
-		this.b_initial_post = (this.b_update_from_fetch) ? false : true;
-
-		this.b_update_from_fetch = false;
+		this.b_initial_post = (this.props.data==undefined&&this.props.data=='') ? false : true;
 		this.cell_text = React.createRef();
-		
-		// Data recieved from the DB
-		if( this.props.data != undefined && this.props.data !='' ) {
-			this.setState({data: this.props.data});
-		}
 	}
 
 	componentDidUpdate() { 
 		if(this.state.editing) this.cell_text.current.focus(); 
 		if( this.state.selected && this.props.yield_focus() ) this.setState({ focused: false });
 		//console.log(`YIELDING: ${this.props.yield_focus()} : ${this.state.focused}`)
-
-		if(this.props.data != undefined && !this.b_update_from_fetch ) {
-			this.setState({data: this.props.data});
-			// TODO: Update is too fast and nothing gets printed
-			this.b_update_from_fetch = true;
-		}
 	}
 
 
@@ -65,11 +52,13 @@ class Cell extends React.Component {
 						 ref={this.cell_text}
 						 onBlur={ () => {
              	this.setState({selected: false, editing: false, data: this.cell_text.current.innerText.replaceAll('\n', '\n\n')});
-							this.props.alert_action( (this.b_initial_post) ? Core.cell_data_methods.POST
-							                                               : Core.cell_data_methods.PATCH, 
-																				this.props.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
-							this.cell_text.current.innerText = '';
-							if(this.b_initial_post) this.b_initial_post = false;
+							if(this.cell_text.current.innerText.replaceAll('\n', '\n\n') !== ''){
+								this.props.alert_action( (this.b_initial_post) ? Core.cell_data_methods.POST
+							 	                                               : Core.cell_data_methods.PATCH, 
+																					this.props.id, this.cell_text.current.innerText.replaceAll('\n', '\n\n'));
+								this.cell_text.current.innerText = '';
+								if(this.b_initial_post) this.b_initial_post = false;
+							}
 						 }}>
 					{this.state.data.replaceAll('\n\n', '\r\n')}
 				</div>

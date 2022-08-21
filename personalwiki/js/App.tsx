@@ -26,8 +26,8 @@ class File extends React.Component {
 	b_selected: boolean;
 	b_yield_focus: boolean;
 	cells: Array<any>;
-	state: any;
-	selected: any;
+	state: { cells: number };
+	selected: boolean[];
 
 	constructor(props) {
 		super(props);
@@ -38,7 +38,6 @@ class File extends React.Component {
 		// After completing the changes in the Queue
 		// Store the changes in a stack ready for an Undo
 		this.undo_stack = [];
-
 
 		// Keep track of how many times the object re-reders.
 		// Some processes do not run on initial render.
@@ -88,7 +87,7 @@ class File extends React.Component {
 				if(Object.keys(res).length > 0) {
 					this.cells = [];
 					for( const cell in res ) {
-						this.cells.push( <Cell key={parseInt(cell)} id={parseInt(cell)}
+						this.cells.push( <Cell key={parseInt(cell)+10} id={parseInt(cell)}
 		                               alert_action={this._cell_alert_action.bind(this)} 
 													         yield_focus={ this.alert_unselect_yield.bind(this) }
 																	 data={ res[cell].data }
@@ -118,8 +117,10 @@ class File extends React.Component {
 	_push_data = async (data: Core.CellUpdate) => {
 		switch(data.method) {
 			case Core.cell_data_methods.POST:
-				console.log('%cPOST' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
-				post_cell_update(data.uuid, data.data);
+				if( data.data !== '') {
+					console.log('%cPOST' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
+					post_cell_update(data.uuid, data.data);
+				}
 				break;
 
 			case Core.cell_data_methods.DELETE:
