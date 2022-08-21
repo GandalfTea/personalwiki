@@ -5,8 +5,7 @@ import Cell from './Cell';
 import PageHeader from './PageHeader.jsx';
 
 import * as Core from './include';
-import { Queue, Stack } from './DataStructures';
-import { fetch_cells, post_cell_update, delete_cell } from './api.js';
+import { fetch_cells, post_cell_update, delete_cell, patch_cell } from './api.js';
 
 import { v4 as uuid } from 'uuid';
 
@@ -14,30 +13,31 @@ import { v4 as uuid } from 'uuid';
 /*	GLOBAL VARIABLES	*/
 
 const WORKING_NOTEBOOK: string = "Demo Notebook";
-const WORKING_FILE: string = "Quantum Half-Spin";
+const WORKING_FILE: string = "Computer Memory Basics";
 const STATIC_URL: string = "../wikiapp/static/";
 const AUTOSAVE: number = 1000; // 1 seconds 
 
 class File extends React.Component {
-	queue: any;
-	undo_stack: any;
+
+	queue: CellUpdate[];
+	undo_stack: CellUpdate[];
 	cycles: number;
 	b_watching: boolean;
 	b_selected: boolean;
 	b_yield_focus: boolean;
 	cells: Array<any>;
-	state: any;
-	selected: any;
+	state: { cells: number };
+	selected: boolean[];
 
 	constructor(props) {
 		super(props);
 		
 		// Use a Queue to store pending changes to the backend
-		this.queue = new Queue<Core.CellUpdate>();
+		this.queue = [];
 
 		// After completing the changes in the Queue
 		// Store the changes in a stack ready for an Undo
-		this.undo_stack = new Stack<Core.CellUpdate>();
+		this.undo_stack = [];
 
 		// Keep track of how many times the object re-reders.
 		// Some processes do not run on initial render.
@@ -54,7 +54,6 @@ class File extends React.Component {
 		this.b_yield_focus = false;
 
 		// Hold all Cell objects ready for render
-		// TODO: Maybe find a way to not store all data?
 		this.cells = [];
 
 		// Initial number of cells.
@@ -66,7 +65,6 @@ class File extends React.Component {
 		for( var i = 0; i < this.state.cells; i++) this.selected[i] = false;
 
 		// Render the initial number of cells, if DB is empty,
-		// leave them to edit, overwrite with DB if not
 		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} 
 		                                                                id={i} key={i} 
 													                                          yield_focus={ this.alert_unselect_yield.bind(this) }
@@ -89,7 +87,7 @@ class File extends React.Component {
 				if(Object.keys(res).length > 0) {
 					this.cells = [];
 					for( const cell in res ) {
-						this.cells.push( <Cell key={parseInt(cell)} id={parseInt(cell)}
+						this.cells.push( <Cell key={parseInt(cell)+10} id={parseInt(cell)}
 		                               alert_action={this._cell_alert_action.bind(this)} 
 													         yield_focus={ this.alert_unselect_yield.bind(this) }
 																	 data={ res[cell].data }
@@ -105,9 +103,9 @@ class File extends React.Component {
 
 		// Autosave Loop 
 		setInterval( () => {
-			if(this.queue.size() > 0) {
-				for(var i = 0; i <= this.queue.size(); i++) {
-					const request: Core.CellUpdate = this.queue.dequeue();	
+			if(this.queue.length > 0) {
+				for(var i = 0; i <= this.queue.length; i++) {
+					const request: Core.CellUpdate = this.queue.shift();	
 					if( typeof(request) !== undefined ) {
 						this._push_data(request);
 					}
@@ -119,25 +117,28 @@ class File extends React.Component {
 	_push_data = async (data: Core.CellUpdate) => {
 		switch(data.method) {
 			case Core.cell_data_methods.POST:
-
-				// TODO: In order to post updates, the program needs to detect changed cells
-				console.log('%cPOST' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
-				post_cell_update(data.uuid, data.data);
+				if( data.data !== '') {
+					console.log('%cPOST' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
+					post_cell_update(data.uuid, data.data);
+				}
 				break;
+
 			case Core.cell_data_methods.DELETE:
-				console.log('%cDELETE' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				console.log('%cDELETE' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
 				await delete_cell(data.uuid, data.data);
 
+				// Delete from DOM
 				const idx: number = this.cells.findIndex( obj => { 
 						return obj.props.id == parseInt(document.querySelector(`[data-uuid='${data.uuid}']`).dataset.id)
 				});
-				console.log(idx)
 				this.cells.splice(idx, 1)[0];
 				this.cells = [...this.cells];
 				this.setState({cells: this.state.cells})
 				break;
+
 			case Core.cell_data_methods.PATCH:
-				console.log('%cPATCH' + `%c ${data.uuid}:` + ` %c${data.data}`, "color:#ff8359", "color:#7FB7BE", "color:white");
+				console.log('%cPATCH' + `%c ${data.uuid}:`, "color:#ff8359", "color:#7FB7BE");
+				patch_cell(data.uuid, data.data);
 				break;
 			default:
 		}
@@ -226,7 +227,7 @@ class File extends React.Component {
 					data: data,
 					method: method,
 				};
-				this.queue.enqueue(request);
+				this.queue.push(request);
 				break;
 
 			default:
@@ -257,6 +258,7 @@ class File extends React.Component {
 
 		// Change Data Attribute 
 		var new_cells = [];
+		console.log(this.cells)
 		for( let i: number = 0; i < this.cells.length; i++) {
 			new_cells.push( React.cloneElement(this.cells[i], { 
 				//key:i, 

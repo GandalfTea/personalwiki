@@ -5,7 +5,7 @@
 
 .cell {
 	font-size: 13px;
-	line-height: 20px;
+	line-height: 18px;
 }
 
 .cell h1, h2, h3, h4, h5, h6 {
@@ -14,17 +14,18 @@
 }
 
 .cell pre {
-	background-color: #eee;
+	background-color: #f6f6f6;
 	padding: 15px 25px;
 	margin-bottom: 15px;
 	margin-top: 15px;
 	margin-left: -20px;
 	width: calc(100% + 40px);
 	border-radius: 5px;
+	line-height: 11px !important;
 }
 
 .cell code {
-	background-color: #eee;
+	background-color: #f6f6f6;
 	padding: 2px 5px;
 	border-radius: 5px;
 }

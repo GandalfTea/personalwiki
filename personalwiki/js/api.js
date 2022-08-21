@@ -55,5 +55,12 @@ async function delete_cell(uuid, data) {
 	xhr.send(JSON.stringify(data));
 }
 
-export { fetch_cells, post_cell_update, delete_cell };
+async function patch_cell(uuid, data) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("PATCH", "http://localhost:8000/api/cell/" + uuid , true);
+	xhr.setRequestHeader("Content-Type", 'application/json');
+	xhr.send(JSON.stringify(data));
+}
+
+export { fetch_cells, post_cell_update, delete_cell, patch_cell };
 
