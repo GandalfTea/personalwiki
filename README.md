@@ -25,10 +25,10 @@ pip installed by the script in case you don't already have them.
 
 
 #### Upcoming 0.1.1 Update:
- - [] Multiple Files Support
- - [] UI/UX Improvement
- - [] Unit Testing
- - [] Cell Indexing and TOC
+ - [ ] Multiple Files Support
+ - [ ] UI/UX Improvement
+ - [ ] Unit Testing
+ - [ ] Cell Indexing and TOC
 
 
 #### To Research:
