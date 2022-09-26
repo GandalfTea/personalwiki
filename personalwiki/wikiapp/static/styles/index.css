@@ -85,15 +85,16 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 
 .cell:focus {
 	background-color: white;
-	border: 1.5px solid #555;
-	border-radius: 2px;
+	border: 1px solid #66BB6A;;
+	border-radius:  0px 2px 2px 0px;
 	border-left: 6px solid #66BB6A;
 	transition: 0.2s;
 }
 
 .cell-selected {
-	outline: 1.5px solid #bbb;
-	border-left: 5px solid #42A5F5;
+	border: 1px solid #42A5F5;;
+	border-radius: 0px 3px 3px 0px;
+	border-left: 6px solid #42A5F5;
 }
 
 .cell-empty {
@@ -108,7 +109,6 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 .cell-selected-options {
 	width: 30px;
 	height: 100px;
-	background-color: #e9e9e9;
 	position: absolute;
 	left: 6.6%;
 	top: calc(1vh - 1px);
@@ -135,9 +135,23 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	margin-top: 6px;
 }
 
-.cell-selected-options button:nth-of-type(2) {
+.cell-selected-options button:nth-of-type(3) {
 	transform: rotate(180deg);
 }
+
+.cell-id-prompt {
+	position: absolute;
+	right: 3vw;
+	color: #555;
+	font-family: monospace;
+	margin-top: 1.5vh;
+	height: 30px;
+}
+
+.cell-id-prompt:hover {
+	font-weight: bold;
+}
+
 
 /*	BUTTON AND LAST EDIT	*/
 

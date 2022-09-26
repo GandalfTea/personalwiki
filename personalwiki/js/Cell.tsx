@@ -80,11 +80,12 @@ class Cell extends React.Component {
 					<div className='cell-selected-options'>
 						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_UP, this.props.id)}>
 							<img src={IMG_ARROW} alt='move cell up' /></button>
-						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_DOWN, this.props.id)}>
-							<img src={IMG_ARROW} alt='move cell down' /></button>
 						<button type='button' onClick={ () => this.alert_parent( Core.cell_data_methods.DELETE, this.props.id)}>
 							<img src={IMG_TRASH} alt='delete cell' /></button>
+						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_DOWN, this.props.id)}>
+							<img src={IMG_ARROW} alt='move cell down' /></button>
 					</div>
+					<p className='cell-id-prompt'> &#9664; [{ this.props.id + 1}]</p>
 				</div>
 			)
 		}
