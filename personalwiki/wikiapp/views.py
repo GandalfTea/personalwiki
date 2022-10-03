@@ -80,4 +80,28 @@ def CellsView(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serialzier.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
+def FileSpecificCellsView(request):
+    # BUG: Multiple files with the same name
+    cells = Cell.objects.get(main_file=File.objects.filter(name=request.data['name'])[0])
+    serializer = CellSerializer(cells, many=True)
+    if request.method == 'GET' or request.method == 'POST':
+        print(serializer.data)
+        return Response(serializer.data)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET', 'POST'])
+def NotebookSpecificFilesView(request):
+    if request.method == 'GET':
+        files = File.objects.get(Notebook.objects.get(name=request.data))
+        serializer = FileSerializer(files, many=True)
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+

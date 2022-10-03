@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	height: 100px;
 	position: absolute;
 	left: 6.6%;
-	top: calc(1vh - 1px);
+	top: 2vh;
 
 	display: flex;
 	flex-direction: column;
@@ -135,8 +135,8 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	margin-top: 6px;
 }
 
-.cell-selected-options button:nth-of-type(3) {
-	transform: rotate(180deg);
+.cell-selected-options button:nth-of-type(2) img {
+	width: 12px;
 }
 
 .cell-id-prompt {
@@ -146,10 +146,19 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	font-family: monospace;
 	margin-top: 1.5vh;
 	height: 30px;
+	cursor: pointer;
 }
 
 .cell-id-prompt:hover {
 	font-weight: bold;
+}
+
+.cell-id-prompt__input {
+	color: #66bb6a;
+}
+
+.cell-id-prompt__selected {
+ color: #42A5F5;
 }
 
 
@@ -160,13 +169,18 @@ h1, h2, h3, h4, h5, h6, p, a, textarea, input, div {
 	height: 40px;
 	margin: auto;
 	margin-top: 3vh;
-	margin-bottom: 3vh;
+	margin-bottom: 10vh;
 	border-radius: 50px;
 	background-color: #eee;
 }
 
-.add-cell-button:hover {
-	background-color: #ccc;
+/* This is bad */
+.add-cell-button p {
+	font-size: 30px;
+	width: 40px;
+	text-align: center;
+	padding-top: 2px;
+	cursor: pointer;
 }
 
 .last-edit {
