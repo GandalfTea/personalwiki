@@ -26,10 +26,11 @@ from wikiapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name='file_editing.html')),
-    path('tree', TemplateView.as_view(template_name='dirs.html')),
+    path('tree', TemplateView.as_view(template_name='tree.html')),
     path('api/cells/', views.CellsView),
     path('api/cell/<uuid:pk>', views.CellView),
     path('api/file/cells', views.FileSpecificCellsView),
+    path('api/notebook/files', views.NotebookSpecificFilesView),
 ] 
 
 urlpatterns = format_suffix_patterns(urlpatterns)

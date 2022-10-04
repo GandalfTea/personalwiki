@@ -5,10 +5,11 @@ module.exports = {
 
 	mode: 'development',
 
-	entry: path.resolve(__dirname, './js/App.tsx'),
+	entry: {  file: path.resolve(__dirname, './js/App.tsx'),
+						tree: path.resolve(__dirname, './js/tree.tsx') },
 
 	output: {
-		filename: 'file-bundle.js',
+		filename: '[name].bundle.js',
 		path: path.resolve(__dirname, './wikiapp/static/'),
 	},
 

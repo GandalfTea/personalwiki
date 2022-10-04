@@ -11,15 +11,16 @@ import {v4 as uuid } from 'uuid';
 			
 
 async function fetch_cells(notebook, file) {
-	/*
-	fetch('/api/cells/').then(res => res.json()).then( (result) => {
-		return filter_cells(file, result);
-	}, (err) => {
-		handle_cell_fetch_failure(error);
-	});
-	*/
 
 	// TODO: ERR func
+	
+	/*
+	var req = new HMLHttpRequest();
+	req.open('GET', 'https://localhost:8000/api/file/cells', true);
+	req.setRequestHeader('Content-Type', 'application/json');
+	req.send(JSON.stringify(file));
+
+	*/
 
 	const res = await fetch('/api/cells/');
 	const json = await res.json();
