@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -25,7 +25,8 @@ from wikiapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='file_editing.html')),
+    #path('', TemplateView.as_view(template_name='file_editing.html')),
+    path('', RedirectView.as_view(url='tree', permanent=True)),
     path('tree', TemplateView.as_view(template_name='tree.html')),
     path('api/cells/', views.CellsView),
     path('api/cell/<uuid:pk>', views.CellView),
