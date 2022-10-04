@@ -27,11 +27,13 @@ pip installed by the script in case you don't already have them.
 
 Get all the files associated with a notebook:
 ```bash
-$ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \ [ Notebook Name ] "}" 127.0.0.1:8000/api/notebook/files
+$ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \ [ Notebook Name ] "}" \
+       127.0.0.1:8000/api/notebook/files
 ```
 Get all the cells associated with a file:
 ```bash
-$ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \" [ File Name ] \"}" 127.0.0.1:8000/api/file/cells
+$ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \" [ File Name ] \"}" \ 
+       127.0.0.1:8000/api/file/cells
 ```
 
 
