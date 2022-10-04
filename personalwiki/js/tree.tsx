@@ -7,8 +7,8 @@ import * from React-DOM as 'react-dom';
 const NotebookEntry = function(props) {
 	// TODO: Collapse
 	return(
-		<div>
-			<a href=''>{ props.name } </a>
+		<div className="notebook_entry" >
+			<a href=''> &#9660;     { props.name } </a>
 			{ props.files }
 		</div>
 	);
@@ -16,8 +16,8 @@ const NotebookEntry = function(props) {
 
 const FileEntry = function(props) {
 	return(
-		<div>
-			<a href=''> { props.name } </a>
+		<div className="file_entry">
+			<a href=''>&#x2767;   { props.name } </a>
 		</div>
 	);
 }
@@ -66,7 +66,7 @@ function fetch_files_of_notebook( notebook: string ) {
 	);
 
 	root.render(
-		<div>
+		<div className="tree">
 			{UI}
 		</div>
 	);
