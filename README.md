@@ -36,12 +36,13 @@ $ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \" [ File Nam
        127.0.0.1:8000/api/file/cells
 ```
 
-
+&nbsp;
 
 #### Upcoming 0.1.1 Update:
  - [ ] Multiple Files Support
  - [x] UI/UX Improvement
  - [ ] Unit Testing
+ - [ ] DB Backup and RAID?
  - [ ] Cell Indexing and TOC
 
 
