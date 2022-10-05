@@ -6,6 +6,7 @@ from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
 
 import uuid
+from datetime import datetime
 
 """ I am not sure if the cells should be stored separately
     or simply in a single data field. Max theoretical file
@@ -19,7 +20,8 @@ class Notebook(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=200)
-    #last_edit = models.DateTimeField(auto_now_add=True, null=True)
+    last_edit = models.DateTimeField(auto_now_add=True, null=True)
+    url = models.CharField(max_length=200)
     notebook = models.ForeignKey(Notebook, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):

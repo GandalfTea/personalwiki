@@ -307,7 +307,7 @@ class File extends React.Component {
 		return(
 			<div className="page">
 				<>
-				{//console.log(this.b_yield_focus)}
+				{console.log(this.b_yield_focus)}
 				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={this.props.file} />
 
 				{this.cells}

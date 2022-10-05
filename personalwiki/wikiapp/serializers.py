@@ -22,7 +22,8 @@ class NotebookSerializer(serializers.Serializer):
 
 class FileSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
-    #last_edit = serializers.DateTimeField()
+    last_edit = serializers.DateTimeField()
+    url = serializers.CharField(max_length=200)
     notebook = NotebookSerializer()
 
     def create(self, validated_data):
