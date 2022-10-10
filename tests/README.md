@@ -31,12 +31,12 @@ API endpoints:
 ./api/files            // GET: Returns all the Files
 ./api/cells            // GET: Returns all the Cells
 
-./api/cell/<uuid:pk>	 // GET: Returns the cell with the specific UUID
+./api/cell/<uuid:pk>   // GET: Returns the cell with the specific UUID
                        // PUT: Create a cell with the UUID and contents of [ request.data ]
-											 // PATCH: Update the Cell with new [ request.data ]
-											 // DELETE: Delete specific Cell
+                       // PATCH: Update the Cell with new [ request.data ]
+                       // DELETE: Delete specific Cell
 
-./api/file/<slug>			 // TBD
+./api/file/<slug>      // TBD
 
 ./api/file/cells       // POST: Get all the Cells of specific File.
                        // Request data must be JSON of form {"name" : [ File Name ] }
