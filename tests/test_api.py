@@ -14,7 +14,7 @@ VERBOSE=False
 def test_notebooks():
 
     # GET
-    r = rq.get("http://127.0.0.1:8000/api/notebooks")
+    r = rq.get(f"http://127.0.0.1:{PORT}/api/notebooks")
     if r.status_code != 200:
         raise Exception("Failed: Notebook fetch: 127.0.0.1/api/notebooks Status code: %s", r.status_code)
     else:
@@ -26,7 +26,7 @@ def test_notebooks():
     # PATCH
 
 def test_files_of_notebook(notebook):
-    r = rq.post("http://127.0.0.1:8000/api/notebook/files", 
+    r = rq.post(f"http://127.0.0.1:{PORT}/api/notebook/files", 
                 headers={"Content-Type": "application/json"}, 
                 data=json.dumps({"name":notebook})) 
     if r.status_code != 200:
@@ -38,7 +38,7 @@ def test_files_of_notebook(notebook):
 
 
 def test_cells_of_file(filename):
-    r = rq.post("http://127.0.0.1:8000/api/files/cells", 
+    r = rq.post(f"http://127.0.0.1:{PORT}/api/files/cells", 
                 headers={"Content-Type": "application/json"}, 
                 data=json.dumps({"name":filename})) 
     if r.status_code != 200:
