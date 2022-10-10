@@ -18,13 +18,6 @@ PORT [int]           Localhost PORT of App. Default: 8000
 
 &nbsp;
 
-
-#### cURL
-You can manually test the api:
-
-
-&nbsp;
-
 API endpoints:
 ```
 ./api/notebooks        // GET: Returns all the Notebooks
@@ -46,7 +39,7 @@ API endpoints:
 
 ```
 
-#### Examples
+#### cURL Examples
 
 Get all the files associated with a notebook:
 ```bash
