@@ -26,9 +26,8 @@ pip installed by the script in case you don't already have them.
 #### Upcoming 0.1.1 Update:
  - [ ] Multiple Files Support
  - [x] UI/UX Improvement
+ - [x] UI Customisable Themes
  - [x] Unit Testing
- - [ ] DB Backup and RAID?
- - [ ] Cell Indexing and TOC
 
 
 &nbsp;
