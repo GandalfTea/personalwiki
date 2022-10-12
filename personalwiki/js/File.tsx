@@ -1,5 +1,4 @@
 
-export default File;
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import Cell from './Cell';
@@ -56,8 +55,7 @@ class File extends React.Component {
 		// Hardcoded for now
 		this.AUTOSAVE = 1000 // 1 second
 
-		// Initial number of cells.
-		// Will be overwritten from the backend data
+		// cells:  Initial number of cells. Will be overwritten from the backend data
 		this.state = { cells: 2 };
 
 		// Store selected cells for multiple cell manipulation
@@ -66,8 +64,10 @@ class File extends React.Component {
 
 		// Render the initial number of cells, if DB is empty,
 		for(var i = 0; i < this.state.cells; i++) this.cells.push(<Cell alert_action={this._cell_alert_action.bind(this)} 
+													         	                                yield_focus={ this.alert_unselect_yield.bind(this) }
 		                                                                id={i} key={i} 
 																																		uuid={ uuid() }
+																                                    theme={this.props.theme}
 																																		/>);
 
 		this.add_cell = this.add_cell.bind(this);
@@ -91,6 +91,7 @@ class File extends React.Component {
 													         yield_focus={ this.alert_unselect_yield.bind(this) }
 																	 data={ res[cell].data }
 																	 uuid={ res[cell].uuid }
+																	 theme={this.props.theme}
 													   />);
 					}
 					this.setState({ cells: Object.keys(res).length });
@@ -239,6 +240,7 @@ class File extends React.Component {
 		                      alert_action={ this._cell_alert_action.bind(this)} 
 													yield_focus={ this.alert_unselect_yield.bind(this) }
 													uuid={ uuid() }
+													theme={this.props.theme}
 													/>);
 		// This is stupid, but cells don't render without a new memory reference
 		// TODO: This is taxing if cells scale
@@ -305,14 +307,18 @@ class File extends React.Component {
 
 	render() {
 		return(
-			<div className="page">
+			<div className="page" style={{backgroundColor: this.props.theme.background }}>
 				<>
 				{console.log(this.b_yield_focus)}
-				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={this.props.file} />
+				<PageHeader address="Algebra / Vectors / Vector Arithmatic" title={this.props.file}
+				            theme={this.props.theme} />
 
 				{this.cells}
 
-				<p className="last-edit">{"Last Update: " + this._get_date().replaceAll('/', '.').replace('@', ' at ')}</p>
+				<p className="last-edit" style={{ color: this.props.theme.text }} >
+					{"Last Update: " + this._get_date().replaceAll('/', '.').replace('@', ' at ')}
+				</p>
+
 				<div className="add-cell-button" onClick={ () => this.add_cell()} > 
 					<p>&#x2B;</p>
 				</div>

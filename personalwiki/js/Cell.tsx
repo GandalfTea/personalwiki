@@ -46,9 +46,12 @@ class Cell extends React.Component {
 			return(
 				<div className='cell-wrapper'>
 					<div className={ `cell cell-input ${(this.state.data==='') ? 'cell-empty' : '' }` }
-         	    contentEditable
+							 style={{ backgroundColor: this.props.theme.cell_editing 
+							          borderColor: this.props.theme.cell_editing_border 
+												color: this.props.theme.text}}
+         	     contentEditable
 							 tabIndex={0}
-         	    data-id={this.props.id}
+         	     data-id={this.props.id}
 							 data-uuid={this.props.uuid}
 							 ref={this.cell_text}
 							 onBlur={ () => {
@@ -68,11 +71,17 @@ class Cell extends React.Component {
 			)
 		} else {
 
+			console.log(this.props.theme.cell_idle)
+
 			// VIEW MODE
 			return(
 				<div className='cell-wrapper'>
 					{ /*console.log(`CELL ${this.props.id} :  ${this.props.yield_focus()}`)*/ }
-					<div className={ `cell ${ this.state.selected ? 'cell-selected' : '' } ${ (this.state.data==='') ? 'cell-empty' : ''}`}
+					<div className={ `cell ${ this.state.selected ? 'cell-selected' : '' } 
+																 ${ (this.state.data==='') ? 'cell-empty' : ''}`}
+							 style={{ backgroundColor: this.state.selected ? this.props.theme.cell_selected : this.props.theme.cell_idle
+							           borderColor: this.state.selected ? this.props.theme.cell_selected_border : this.props.theme.cell_idle_border
+												 color: this.props.theme.text }}
                data-id={this.props.id}
 							 data-uuid={this.props.uuid}
 							 onClick={ this.state.selected ? () => this.setState({ editing: true}) 
@@ -82,12 +91,12 @@ class Cell extends React.Component {
 					</div>
 					<div className='cell-selected-options'>
 						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_UP, this.props.id)}>
-							<p>&#9650;</p></button>
+							<p style={{ color: this.props.theme.icons }}>&#9650;</p></button>
 						<button type='button' onClick={ () => this.alert_parent( Core.cell_data_methods.DELETE, this.props.id)}>
 							{ //<p>&#10006;</p></button> }
 							<img src={IMG_TRASH} alt='delete cell' /></button>
 						<button type='button' onClick={ () => this.alert_parent( Core.cell_ui_methods.CELL_MOVE_DOWN, this.props.id)}>
-							<p>&#9660;</p></button>
+							<p style={{ color: this.props.theme.icons }}>&#9660;</p></button>
 					</div>
 					<p className={ this.state.selected ? 'cell-id-prompt cell-id-prompt__selected' : 'cell-id-prompt'}> &#9664; [{ this.props.id + 1}]</p>
 				</div>

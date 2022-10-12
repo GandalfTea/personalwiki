@@ -3,6 +3,7 @@
 export const Light = {
 	background: '#fff',
 	text: '#333',
+	icons: '#000',
 	header_address: '#888',
 	header_title: '#000',
 	cell_idle: '#fafafa',
@@ -17,6 +18,7 @@ export const Light = {
 export const Dark = {
 	background: '#121212',
 	text: '#aaa',
+	icons: '#fff',
 	header_address: '#888',
 	header_title: '#FFF',
 	cell_idle: '#444',
