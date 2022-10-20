@@ -2,6 +2,7 @@
 
 from rest_framework import serializers
 from wikiapp.models import Cell, File, Notebook
+from django.utils.text import slugify
 
 # Serialize the data before sending it between the database and UI
 
@@ -9,7 +10,7 @@ class NotebookSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=120)
 
     def create(self, validated_data):
-        return Notebook.objects.create(**validated_data)
+        instance = Notebook.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
@@ -18,6 +19,7 @@ class NotebookSerializer(serializers.Serializer):
 
     class Meta:
         model = Notebook
+        fields = ('title')
 
 
 class FileSerializer(serializers.Serializer):
@@ -27,6 +29,8 @@ class FileSerializer(serializers.Serializer):
     notebook = NotebookSerializer()
 
     def create(self, validated_data):
+        pn = Notebook.objects.filter(title=validated_data['notebook']['title'])
+        validated_data['notebook'] = pn[0];
         return File.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
@@ -40,7 +44,6 @@ class FileSerializer(serializers.Serializer):
         model = File
 
 
-    #main_file = FileSerializer()
 class CellSerializer(serializers.Serializer):
     data = serializers.CharField(style={'base_template' : 'textarea.html'})
     uuid = serializers.CharField()
@@ -52,7 +55,6 @@ class CellSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.data = validated_data.get('data', instance.data)
         instance.uuid = validated_data.get('uuid', instance.uuid)
-        #instance.main_file = validated_data.get('main_file', instance.main_file)
         instance.save()
         return instance
 

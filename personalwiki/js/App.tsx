@@ -10,7 +10,7 @@ class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = { theme: 1 };
+		this.state = { theme: 0 };
 	}
 
 	render() {

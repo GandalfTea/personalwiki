@@ -20,8 +20,8 @@ class Notebook(models.Model):
 
 class File(models.Model):
     name = models.CharField(max_length=200)
-    last_edit = models.DateTimeField(auto_now_add=True, null=True)
-    url = models.CharField(max_length=200)
+    last_edit = models.DateTimeField(auto_now=True, null=True)
+    url = models.SlugField(max_length=200, unique=True)
     notebook = models.ForeignKey(Notebook, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):

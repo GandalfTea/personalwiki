@@ -25,12 +25,12 @@ from wikiapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', TemplateView.as_view(template_name='file_editing.html')),
     path('', RedirectView.as_view(url='tree', permanent=True)),
     path('tree', TemplateView.as_view(template_name='tree.html')),
     path('editing', TemplateView.as_view(template_name='file_editing.html')),
     path('api/cells/', views.CellsView),
     path('api/cell/<uuid:pk>', views.CellView),
+    path('api/file/<slug:slug>', views.FileView),
     path('api/file/cells', views.FileSpecificCellsView),
     path('api/notebook/files', views.NotebookSpecificFilesView),
 ] 

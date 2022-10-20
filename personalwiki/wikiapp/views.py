@@ -10,6 +10,7 @@ from wikiapp.models import Cell, File, Notebook
 from django.shortcuts import get_object_or_404
 
 import uuid
+from django.utils import timezone
 
 class CellViewSet(viewsets.ModelViewSet):
     serializer_class = CellSerializer
@@ -23,6 +24,44 @@ class FileViewSet(viewsets.ModelViewSet):
 class NotebookViewSet(viewsets.ModelViewSet):
     queryset = Notebook.objects.all()
     serializer_class = NotebookSerializer
+
+
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+def FileView(request, slug):
+
+    print("\n\n\n")
+
+    # Create new File
+
+    # TODO: Remove the Notebook filter request from here. Already doing one in serializer.
+    if request.method == 'PUT':
+        parent_notebook = Notebook.objects.filter(title=request.data['parent-title'])[0]
+        assert parent_notebook is not None
+        nf = File(name=request.data['name'], url=slug, notebook=parent_notebook, last_edit=timezone.now())
+        sf = FileSerializer(nf)
+        serializer = FileSerializer(data=sf.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        print(serializer.errors, end='\n\n')
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # Check if File exists
+    try:
+        f = File.Objects.get(pk=pk)
+    except Cell.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        pass
+    if request.method == 'PATCH':
+        pass
+    if request.method == 'DELETE':
+        pass
+
+        
+
 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
