@@ -17,7 +17,7 @@ const NotebookEntry = function(props) {
 const FileEntry = function(props) {
 	return(
 		<div className="file_entry">
-			<a href=''>&#x2767;   { props.name } </a>
+			<a href={ props.url } >&#x2767;   { props.name } </a>
 		</div>
 	);
 }
@@ -28,7 +28,6 @@ const FileEntry = function(props) {
 
 function fetch_files_of_notebook( notebook: string ) {
 	return new Promise(function (resolve, reject) {
-		//console.log(notebook);
 		var payload = { "name": notebook };
 		var req = new XMLHttpRequest();
 		req.open("POST", "http://localhost:8000/api/notebook/files", true);
@@ -36,13 +35,11 @@ function fetch_files_of_notebook( notebook: string ) {
 		req.send(JSON.stringify(payload));
 		req.onreadystatechange = () => {
 			if( req.readyState == 4 && req.status == 200) {
-				console.log(req.responseText);
 				resolve(req.responseText);
 			}
 		}
 	});
 }
-
 
 
 (async () => {
@@ -54,12 +51,11 @@ function fetch_files_of_notebook( notebook: string ) {
 			let files = await fetch_files_of_notebook(result[i]['title']);
 			let files_ui = [];
 			for( let j of JSON.parse(files) ) {
-				files_ui.push( <FileEntry name={j['name']} />);	
+				files_ui.push( <FileEntry name={j['name']} url={'http://localhost:8000/api/file/' + j['url'] } />);	
 			}
 			UI.push( <NotebookEntry name={result[i]['title']} files={files_ui} />);
 		}
 	}
-
 
 	const root = ReactDOM.createRoot(
 		document.getElementById('root')

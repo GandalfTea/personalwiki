@@ -4,14 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 from taggit.managers import TaggableManager
 from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 
-
 import uuid
 from datetime import datetime
 
-""" I am not sure if the cells should be stored separately
-    or simply in a single data field. Max theoretical file
-    size could get pretty big.
-    Each cell is part of a File, and each File is part of a Notebook """
 class Notebook(models.Model):
     title = models.CharField(max_length=120)
 
@@ -26,7 +21,6 @@ class File(models.Model):
 
     def __str__(self):
         return self.name
-
 
 """ The cell model has both a uuid and a hash :
     The uuid is for identifying if the cell is in the db.

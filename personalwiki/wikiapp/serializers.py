@@ -50,6 +50,8 @@ class CellSerializer(serializers.Serializer):
     uhash = serializers.CharField()
 
     def create(self, validated_data):
+        #pf = Files.objects.filter(name=validated_data['main_file'])
+        #validated_data['main_file'] = pf[0]
         return Cell.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

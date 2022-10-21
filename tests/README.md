@@ -41,6 +41,14 @@ API endpoints:
 
 #### cURL Examples
 
+Create a new File:
+```bash
+$ curl -X PUT -H "Content-Type: application/json" -d "{\"parent-title\":\"Demo Notebook\" \
+              , \"name\":\"Demo File\"}" 127.0.0.1:8000/api/file/demo-notebook
+
+  // { parent_title: [ Notebook Name ], name: [ File Name [] } [ URL with slug ]
+```
+
 Get all the files associated with a notebook:
 ```bash
 $ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \"Demo Notebook\"}" \
@@ -51,3 +59,4 @@ Get all the cells associated with a file:
 $ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \"Demo File\"}" \ 
        127.0.0.1:8000/api/file/cells
 ```
+

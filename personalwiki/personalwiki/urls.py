@@ -28,7 +28,6 @@ urlpatterns = [
     path('', RedirectView.as_view(url='tree', permanent=True)),
     path('tree', TemplateView.as_view(template_name='tree.html')),
     path('editing', TemplateView.as_view(template_name='file_editing.html')),
-    path('api/cells/', views.CellsView),
     path('api/cell/<uuid:pk>', views.CellView),
     path('api/file/<slug:slug>', views.FileView),
     path('api/file/cells', views.FileSpecificCellsView),
@@ -40,6 +39,7 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 router = routers.DefaultRouter()
 router.register('api/files', views.FileViewSet)
 router.register('api/notebooks', views.NotebookViewSet)
+router.register('api/cells', views.CellsViewSet)
 
 urlpatterns += router.urls
 

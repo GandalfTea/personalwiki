@@ -12,10 +12,12 @@ from django.shortcuts import get_object_or_404
 import uuid
 from django.utils import timezone
 
-class CellViewSet(viewsets.ModelViewSet):
-    serializer_class = CellSerializer
+
+# Views for all the data entries
+
+class CellsViewSet(viewsets.ModelViewSet):
     queryset = Cell.objects.all()
-    lookup_field = 'uuid'
+    serializer_class = CellSerializer
 
 class FileViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
@@ -26,12 +28,10 @@ class NotebookViewSet(viewsets.ModelViewSet):
     serializer_class = NotebookSerializer
 
 
+# Specific views
+
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def FileView(request, slug):
-
-    print("\n\n\n")
-
-    # Create new File
 
     # TODO: Remove the Notebook filter request from here. Already doing one in serializer.
     if request.method == 'PUT':
@@ -60,17 +60,18 @@ def FileView(request, slug):
     if request.method == 'DELETE':
         pass
 
-        
-
 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def CellView(request, pk):
 
     if request.method == 'PUT':
-        cell = Cell(pk, request.data)
-        data = { 'uuid': str(pk), 'data': request.data, 'uhash': 'aa'}
-        serializer = CellSerializer(cell, data=data)
+        mf = File.objects.filter(name=request.data['file-title'])[0]
+        assert mf is not None
+        cell = Cell(pk, request.data, main_file=mf)
+        sc = CellSerializer(cell)
+        serializer = CellSerializer(data=sc)
+
         if serializer.is_valid():
             serializer.save()
             return Response( serializer.data, status = status.HTTP_201_CREATED )
@@ -108,19 +109,6 @@ def CellView(request, pk):
         cell.delete();
         return Response( status=status.HTTP_204_NO_CONTENT )
 
-@api_view(['GET', 'POST'])
-def CellsView(request):
-    if request.method == 'GET':
-        cells = Cell.objects.all()
-        serializer = CellSerializer(cells, many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'POST'])
 def FileSpecificCellsView(request):
@@ -143,6 +131,4 @@ def NotebookSpecificFilesView(request):
     if request.method == 'GET' or request.method == 'POST':
         return Response(serializer.data)
     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 
