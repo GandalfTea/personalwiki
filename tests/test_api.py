@@ -25,6 +25,12 @@ def test_notebooks():
     # CREATE
     # PATCH
 
+def test_files():
+    # GET
+    # CREATE
+    # PATCH
+    pass
+
 def test_files_of_notebook(notebook):
     r = rq.post(f"http://127.0.0.1:{PORT}/api/notebook/files", 
                 headers={"Content-Type": "application/json"}, 
