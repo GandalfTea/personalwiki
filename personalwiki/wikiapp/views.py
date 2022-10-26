@@ -102,22 +102,15 @@ def CellView(request, pk):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'PATCH':
-        cell.data = request.data
-
-        data = { 'uuid': str(pk), 'data': request.data, 'uhash': 'aa'}
-        serializer = CellSerializer(cell, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors, end='\n\n')
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        cell.data = request.data['data']
+        cell.save()
+        return Response(cell.data, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
         serializer = CellSerializer(cell)
         return Response(serializer.data)
 
     elif request.method == 'DELETE':
-        #Cell.objects.filter(pk=request.data['uuid']).delete()
         cell.delete();
         return Response( status=status.HTTP_204_NO_CONTENT )
 
