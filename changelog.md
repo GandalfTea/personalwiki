@@ -1,17 +1,26 @@
 
 ### Changelog
 
-#### 0.1.1
+&nbsp;
+
+#### 0.2.0
 
 New Features:
+* Multiple File Support
+* Easily Customisable Themes
 
-Bug Fixes: 
-* 
+Improvements:
+* Better API endpoints
+* API Testing
+* Default directory tree page
+* Improved Markdown syntax
 
 Style Changes:
-* Removed underlying page.
-* Added selection and editing color coding left-border.
+* Removed Page Borders
+* Added selection and editing color coding border.
+* Added Cell indexing
 
+&nbsp;
 
 #### 0.1.0
 * Cell rendering supports Markdown and LaTeX using `react-markdown` and `react-mathjax`.

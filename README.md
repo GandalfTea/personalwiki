@@ -23,12 +23,24 @@ pip installed by the script in case you don't already have them.
 
 &nbsp;
 
-#### Upcoming 0.1.1 Update:
- - [x] Multiple Files Support
- - [x] UI/UX Improvement
- - [x] UI Customisable Themes
- - [x] Unit Testing
+# Stability Update 0.2.1:
 
+* [ ] Notebook and File Creation
+* [ ] Improve Cell stability and do testing
+* [ ] Initial setup and DB creation
+* [ ] DB backup
+* [ ] Optimise backend API processing time and HTML template creation
+* [ ] Improve editing page weight to < 50kb before cell load
+* [ ] Improve file.bundle.js weight to < 1MB ( now : 2.1MB )
+* [ ] Optimise the number of backend requests ( now: 18 ) and make use of Cell hash.
+* [ ] Improved Cell cacheing
+* [ ] Improve Markdown Syntax
+* [ ] Cell Keyboard Shortcuts
+* [ ] Dir tree page UI update
+* [ ] Make Cell left buttons follow the page scroll for easy access
+* [ ] Cell left click custom menu: add cell above and below, delete
+* [ ] Improved Dark mode color scheme
+* [ ] Add top menu for theme selection, changing file title, etc.
 
 &nbsp;
 
