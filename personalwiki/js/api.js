@@ -1,5 +1,6 @@
 
 import {v4 as uuid } from 'uuid';
+import sha1 from 'sha1';
 
 /*
 	Define functions to fetch the cells, files 
@@ -37,7 +38,7 @@ async function post_cell_update(uuid, data) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("PUT", "http://localhost:8000/api/cell/" + uuid , true);
 	xhr.setRequestHeader("Content-Type", 'application/json');
-	var payload = { "data": data, "parent_url": WORKING_FILE };
+	var payload = { "data": data, "parent_url": WORKING_FILE, "hash":sha1(data) };
 	xhr.send(JSON.stringify(payload));
 }
 

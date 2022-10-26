@@ -80,7 +80,7 @@ def CellView(request, pk):
         print("\n\n\n\n", request.data['parent_url'])
         print(mf.url)
         assert mf is not None
-        cell = Cell(uuid=pk, data=request.data['data'], mf=mf)
+        cell = Cell(uuid=pk, data=request.data['data'], mf=mf, uhash=request.data['hash'])
         sc = CellSerializer(cell)
         serializer = CellSerializer(data=sc.data)
 
