@@ -27,10 +27,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='tree', permanent=True)),
     path('tree', TemplateView.as_view(template_name='tree.html')),
-    path('editing', TemplateView.as_view(template_name='file_editing.html')),
+    #path('editing/<slug:slug>', TemplateView.as_view(template_name='file_editing.html')),
+    path('editing/<slug:slug>', views.EditingView),
     path('api/cell/<uuid:pk>', views.CellView),
     path('api/file/<slug:slug>', views.FileView),
-    path('api/file/cells', views.FileSpecificCellsView),
+    path('api/file/<slug:slug>/cells', views.FileSpecificCellsView),
     path('api/notebook/files', views.NotebookSpecificFilesView),
 ] 
 

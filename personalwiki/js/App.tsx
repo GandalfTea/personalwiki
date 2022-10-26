@@ -18,7 +18,7 @@ class App extends React.Component {
 		document.body.style.backgroundColor = themes[this.state.theme].background;
 		return(
 			<div>
-				<File notebook="Demo Notebook" file="Basic Usage Tutorial and Demo" theme={themes[this.state.theme]} /> 
+				<File notebook="Demo Notebook" file={ WORKING_FILE } theme={themes[this.state.theme]} /> 
 			</div>
 		);
 	}

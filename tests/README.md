@@ -56,7 +56,6 @@ $ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \"Demo Notebo
 ```
 Get all the cells associated with a file:
 ```bash
-$ curl -X POST -H "Content-Type: application/json" -d "{\"name\" : \"Demo File\"}" \ 
-       127.0.0.1:8000/api/file/cells
+$ curl -X POST -H "Content-Type: application/json" 127.0.0.1:8000/api/file/demo-notebook/cells
 ```
 

@@ -38,11 +38,10 @@ def test_files_of_notebook(notebook):
 
 
 def test_cells_of_file(filename):
-    r = rq.post(f"http://127.0.0.1:{PORT}/api/files/cells", 
-                headers={"Content-Type": "application/json"}, 
-                data=json.dumps({"name":filename})) 
+    r = rq.post(f"http://127.0.0.1:{PORT}/api/file/{filename}/cells", 
+                headers={"Content-Type": "application/json"}) 
     if r.status_code != 200:
-        raise Exception("Failed: File Cells fetch: 127.0.0.1/api/file/cells Status code: %s", r.status_code)
+        raise Exception(f"Failed: File Cells fetch: 127.0.0.1/api/file/{filename}/cells Status code: ", r.status_code)
     else:
         print("  PASS: Notebook Cells fetch")
         if VERBOSE: print( f"  RESPONSE {r.status_code} DATA: {r.content}")
@@ -66,4 +65,4 @@ if __name__ == "__main__":
         files = test_files_of_notebook(nb['title'])
         if len(json.loads(files.decode('utf-8', 'strict'))) == 0: print(f"  SKIP: No cells for Files")
         for fl in json.loads(files.decode('utf-8', 'strict')):
-            test_cells_of_file(fl['name'])
+            test_cells_of_file(fl['url'])

@@ -10,33 +10,24 @@ import {v4 as uuid } from 'uuid';
 					 computation.												*/
 			
 
-async function fetch_cells(notebook, file) {
+function fetch_cells(notebook, file) {
+	return new Promise(function(resolve, reject) {
+		var req = new XMLHttpRequest();
+		var url = 'http://localhost:8000/api/file/' + WORKING_FILE + '/cells';
 
-	// TODO: ERR func
-	
-	/*
-	var req = new HMLHttpRequest();
-	req.open('GET', 'https://localhost:8000/api/file/cells', true);
-	req.setRequestHeader('Content-Type', 'application/json');
-	req.send(JSON.stringify(file));
+		req.open('POST', url, true);
+		req.setRequestHeader('Content-Type', 'application/json');
+		req.onreadystatechange = () => {
+			if( req.readyState === 4 ) {
+				var json = JSON.parse(req.responseText);
+				resolve(json);
+			}
+		};
 
-	*/
-
-	const res = await fetch('/api/cells/');
-	const json = await res.json();
-	//return filter_cells(file, json);
-	return json;
+		req.send();
+	});
 }
 
-function filter_cells(file, cells) {
-	var data = [];
-	for( let i=0; i < Object.keys(cells).length; i++ ) {
-		if(cells[i].main_file != null && cells[i].main_file.name == file) {
-			data.push(cells[i]);
-		}
-	}
-	return data;
-}
 
 function handle_cell_fetch_failure(error) {
 	console.log("OOPSIE, there was a problem >.<");
@@ -46,7 +37,8 @@ async function post_cell_update(uuid, data) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("PUT", "http://localhost:8000/api/cell/" + uuid , true);
 	xhr.setRequestHeader("Content-Type", 'application/json');
-	xhr.send(JSON.stringify(data));
+	var payload = { "data": data, "parent_url": WORKING_FILE };
+	xhr.send(JSON.stringify(payload));
 }
 
 async function delete_cell(uuid, data) {

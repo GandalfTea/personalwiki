@@ -48,10 +48,11 @@ class CellSerializer(serializers.Serializer):
     data = serializers.CharField(style={'base_template' : 'textarea.html'})
     uuid = serializers.CharField()
     uhash = serializers.CharField()
+    mf = FileSerializer()
 
     def create(self, validated_data):
-        #pf = Files.objects.filter(name=validated_data['main_file'])
-        #validated_data['main_file'] = pf[0]
+        pf = File.objects.filter(url=validated_data['mf']['url'])
+        validated_data['mf'] = pf[0]
         return Cell.objects.create(**validated_data)
 
     def update(self, instance, validated_data):

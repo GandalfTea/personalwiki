@@ -51,7 +51,7 @@ function fetch_files_of_notebook( notebook: string ) {
 			let files = await fetch_files_of_notebook(result[i]['title']);
 			let files_ui = [];
 			for( let j of JSON.parse(files) ) {
-				files_ui.push( <FileEntry name={j['name']} url={'http://localhost:8000/api/file/' + j['url'] } />);	
+				files_ui.push( <FileEntry name={j['name']} url={'http://localhost:8000/editing/' + j['url'] } />);	
 			}
 			UI.push( <NotebookEntry name={result[i]['title']} files={files_ui} />);
 		}

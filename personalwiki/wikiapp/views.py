@@ -7,13 +7,21 @@ from rest_framework.response import Response
 from wikiapp.serializers import CellSerializer, FileSerializer, NotebookSerializer
 from wikiapp.models import Cell, File, Notebook
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 
 import uuid
 from django.utils import timezone
 
 
-# Views for all the data entries
+# HTML Response Views
+
+def EditingView(request, slug):
+    context = { 'file':slug }
+    return render(request, "file_editing.html", context) 
+
+
+
+# Batch API Views
 
 class CellsViewSet(viewsets.ModelViewSet):
     queryset = Cell.objects.all()
@@ -28,7 +36,9 @@ class NotebookViewSet(viewsets.ModelViewSet):
     serializer_class = NotebookSerializer
 
 
-# Specific views
+
+
+# API Views 
 
 @api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
 def FileView(request, slug):
@@ -49,12 +59,12 @@ def FileView(request, slug):
 
     # Check if File exists
     try:
-        f = File.Objects.get(pk=pk)
+        f = File.objects.get(url=slug)
     except Cell.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        pass
+        return Response(status=status.HTTP_302_FOUND)
     if request.method == 'PATCH':
         pass
     if request.method == 'DELETE':
@@ -66,11 +76,13 @@ def FileView(request, slug):
 def CellView(request, pk):
 
     if request.method == 'PUT':
-        mf = File.objects.filter(name=request.data['file-title'])[0]
+        mf = File.objects.get(url=request.data['parent_url'])
+        print("\n\n\n\n", request.data['parent_url'])
+        print(mf.url)
         assert mf is not None
-        cell = Cell(pk, request.data, main_file=mf)
+        cell = Cell(uuid=pk, data=request.data['data'], mf=mf)
         sc = CellSerializer(cell)
-        serializer = CellSerializer(data=sc)
+        serializer = CellSerializer(data=sc.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -111,13 +123,11 @@ def CellView(request, pk):
 
 
 @api_view(['GET', 'POST'])
-def FileSpecificCellsView(request):
+def FileSpecificCellsView(request, slug):
     # BUG: Multiple files with the same name
-    print("\n\n", request.data);
-    cells = Cell.objects.get(main_file=File.objects.filter(name=request.data['name'])[0])
+    cells = Cell.objects.filter(mf=File.objects.get(url=slug))
     serializer = CellSerializer(cells, many=True)
     if request.method == 'GET' or request.method == 'POST':
-        print(serializer.data)
         return Response(serializer.data)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
