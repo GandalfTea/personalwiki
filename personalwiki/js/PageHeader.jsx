@@ -10,8 +10,8 @@ const PageHeader = (props) => {
 
 	return(
 		<div className="page_header">
-			<div>{address}</div>
-			<h1>{props.title}</h1>
+			<div style={{ color: props.theme.header_address}} >{address}</div>
+			<h1 style={{ color: props.theme.header_title}} >{props.title}</h1>
 		</div>
 	)
 };

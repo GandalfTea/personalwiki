@@ -1,0 +1,21 @@
+
+
+.tree {
+	width: 500px;
+	height: 500px;
+	margin: auto;
+	margin-top: calc(50vh - 250px);
+}
+
+.notebook_entry a,
+.file_entry a {
+	font-family: "Lato";
+	font-size: 16px;
+	line-height: 30px;
+	color: black;
+	text-decoration: none;
+}
+
+.file_entry {
+	margin-left: 20px;
+}

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -25,9 +25,14 @@ from wikiapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='file_editing.html')),
-    path('api/cells/', views.CellsView),
-    path('api/cell/<uuid:pk>', views.CellView)
+    path('', RedirectView.as_view(url='tree', permanent=True)),
+    path('tree', TemplateView.as_view(template_name='tree.html')),
+    #path('editing/<slug:slug>', TemplateView.as_view(template_name='file_editing.html')),
+    path('editing/<slug:slug>', views.EditingView),
+    path('api/cell/<uuid:pk>', views.CellView),
+    path('api/file/<slug:slug>', views.FileView),
+    path('api/file/<slug:slug>/cells', views.FileSpecificCellsView),
+    path('api/notebook/files', views.NotebookSpecificFilesView),
 ] 
 
 urlpatterns = format_suffix_patterns(urlpatterns)
@@ -35,6 +40,7 @@ urlpatterns = format_suffix_patterns(urlpatterns)
 router = routers.DefaultRouter()
 router.register('api/files', views.FileViewSet)
 router.register('api/notebooks', views.NotebookViewSet)
+router.register('api/cells', views.CellsViewSet)
 
 urlpatterns += router.urls
 
