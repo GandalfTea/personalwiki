@@ -23,7 +23,7 @@ pip installed by the script in case you don't already have them.
 
 &nbsp;
 
-# Stability Update 0.2.1:
+#### Stability Update 0.2.1:
 
 * [ ] Notebook and File Creation
 * [ ] Improve Cell stability and do testing
