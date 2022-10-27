@@ -13,7 +13,7 @@ VERBOSE=False
 
 def test_notebooks():
 
-    # GET
+    # Batch GET
     r = rq.get(f"http://127.0.0.1:{PORT}/api/notebooks")
     if r.status_code != 200:
         raise Exception("Failed: Notebook fetch: 127.0.0.1/api/notebooks Status code: %s", r.status_code)
@@ -23,13 +23,27 @@ def test_notebooks():
         return r.content
 
     # CREATE
+    # GET
     # PATCH
 
 def test_files():
-    # GET
-    # CREATE
-    # PATCH
-    pass
+    print("Testing FILE: ", end="")
+    #   CREATE
+    r = rq.put(f"http://127.0.0.1:{PORT}/api/file/demo-testing-file",
+                headers={"Content-Type":"application/json"},
+                data=json.dumps({"parent-title":"demo-testing-notebook", "name":"Demo Testing File"}))
+    assert r.status_code != 200, "\nFailed: Could not CREATE new File."
+    print("#####", end="")
+    #   GET
+    r = rq.get(f"http://127.0.0.1:{PORT}/api/file/demo-testing-file");
+    assert r.status_code != 302, "\nFailed: Could not CREATE new File."
+    print("#####", end="")
+
+    #   PATCH
+    print("#####", end="")
+    #   DELETE
+    print("#####", end="")
+    print(": Success")
 
 def test_files_of_notebook(notebook):
     r = rq.post(f"http://127.0.0.1:{PORT}/api/notebook/files", 
@@ -63,6 +77,7 @@ if __name__ == "__main__":
         if "--verbose" in arg or "-v" in arg:
             VERBOSE=True
 
+    test_files()
 
     print("\n")
     print(f"Testing on PORT:{PORT} VERBOSE:{VERBOSE}")
@@ -72,3 +87,9 @@ if __name__ == "__main__":
         if len(json.loads(files.decode('utf-8', 'strict'))) == 0: print(f"  SKIP: No cells for Files")
         for fl in json.loads(files.decode('utf-8', 'strict')):
             test_cells_of_file(fl['url'])
+
+
+
+
+
+
