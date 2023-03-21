@@ -6,7 +6,6 @@ const app = express()
 const PORT = 8080; // Same as SPNATI, could cause conflict if you a degen
 const DEBUG = 0;
 
-
 app.get("/", (req, res) => {
 	res.redirect('/tree');
 })
