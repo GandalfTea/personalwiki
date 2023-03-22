@@ -4,6 +4,7 @@
 		"outDir": "./compiled/",
 		"allowJs": true,
 		"target": "es5",
+		"types": ["node"],
 		"jsx": "react",
 		"lib": [
 			"dom",

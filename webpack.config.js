@@ -3,13 +3,15 @@ const path = require('path');
 module.exports = {
 
 	mode: 'development',
+	target: 'node',
 
 	entry: {  file: path.resolve(__dirname, './ts/App.tsx'),
-						tree: path.resolve(__dirname, './ts/tree.tsx') },
+						tree: path.resolve(__dirname, './ts/tree.tsx'),
+						app : path.resolve(__dirname, './ts/app.ts') },
 
 	output: {
 		filename: '[name].min.js',
-		path: path.resolve(__dirname, 'compiled/'),
+		path: path.resolve(__dirname, './public/compiled/'),
 	},
 
 	module: {
