@@ -28,7 +28,10 @@ module.exports = {
 	},
 
 	resolve: {
-		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json']
+		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+		alias: {
+			'@core' : path.resolve(__dirname, './src/include.ts')
+		}
 	},
 	
 	stats: {

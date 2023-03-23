@@ -11,5 +11,8 @@
 			"ES2021.String"
 		]
 	},
+	"paths": {
+		"@core" : ["./src/include.ts"]
+	},	
 	"include": ["./ts/**/*"]
 }
