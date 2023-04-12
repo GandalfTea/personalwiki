@@ -12,7 +12,7 @@
 		]
 	},
 	"paths": {
-		"@core" : ["./src/include.ts"]
+		"@core" : ["./src/core.ts"]
 	},	
-	"include": ["./ts/**/*"]
+	"include": ["./ui/**/*"]
 }

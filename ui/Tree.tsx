@@ -3,9 +3,7 @@
 import * from React as 'react';
 import * from React-DOM as 'react-dom';
 
-
 const NotebookEntry = function(props) {
-	// TODO: Collapse
 	return(
 		<div className="notebook_entry" >
 			<a href=''> &#9660;     { props.name } </a>
@@ -23,30 +21,14 @@ const FileEntry = function(props) {
 }
 
 
-
-/*	Get Data From Server and Construct UI */
-
-function fetch_files_of_notebook( notebook: string ) {
-	return new Promise(function (resolve, reject) {
-		var payload = { "name": notebook };
-		var req = new XMLHttpRequest();
-		req.open("POST", "http://localhost:8000/api/notebook/files", true);
-		req.setRequestHeader("Content-Type", 'application/json');
-		req.send(JSON.stringify(payload));
-		req.onreadystatechange = () => {
-			if( req.readyState == 4 && req.status == 200) {
-				resolve(req.responseText);
-			}
-		}
-	});
-}
-
+/*	Get Data From Disk and Construct UI */
 
 (async () => {
 
 	var UI = [];
 
- 	await fetch('/api/notebooks/').then(res => res.json()).then( async (result) => {
+	// Fetch files from server
+ 	/*await fetch('/api/notebooks/').then(res => res.json()).then( async (result) => {
 		for( let i = 0; i < result.length; i++) {
 			let files = await fetch_files_of_notebook(result[i]['title']);
 			let files_ui = [];
@@ -55,7 +37,8 @@ function fetch_files_of_notebook( notebook: string ) {
 			}
 			UI.push( <NotebookEntry name={result[i]['title']} files={files_ui} />);
 		}
-	}
+	} */
+	await read_disk();
 
 	const root = ReactDOM.createRoot(
 		document.getElementById('root')

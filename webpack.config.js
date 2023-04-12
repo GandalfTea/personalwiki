@@ -5,9 +5,9 @@ module.exports = {
 	mode: 'development',
 	target: 'node',
 
-	entry: {  file: path.resolve(__dirname, './ts/App.tsx'),
-						tree: path.resolve(__dirname, './ts/tree.tsx'),
-						app : path.resolve(__dirname, './ts/app.ts') },
+	entry: {  file: path.resolve(__dirname, './ui/App.tsx'),
+						tree: path.resolve(__dirname, './ui/Tree.tsx'),
+						app : path.resolve(__dirname, './server/app.ts') },
 
 	output: {
 		filename: '[name].min.js',
@@ -30,7 +30,7 @@ module.exports = {
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
 		alias: {
-			'@core' : path.resolve(__dirname, './src/include.ts')
+			'@core' : path.resolve(__dirname, './src/core.ts')
 		}
 	},
 	

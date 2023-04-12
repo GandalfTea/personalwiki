@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 
-import File from './File';
-import Cell from './Cell';
-import { Light, Dark } from './Themes.js';
+import File from './components/File';
+import Cell from './components/Cell';
+import { Light, Dark } from './themes.js';
 
 
 class App extends React.Component {

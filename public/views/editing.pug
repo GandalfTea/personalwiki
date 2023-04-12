@@ -4,12 +4,13 @@ html(lang='en')
 	head
 		meta(charset='UTF-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		title= #{filename}
+		p #{file}
+		title=file
 		link(rel='stylesheet', href='../styles/index.css')
 		link(rel='stylesheet', href='../styles/markdown.css')
 
 	body
-		div#app	
+		div#app
 		script .
 			const WORKING_FILE= #{filename}
 			const IMG_ARROW = "assets/up.svg";

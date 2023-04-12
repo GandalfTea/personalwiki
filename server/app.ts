@@ -1,5 +1,6 @@
 
 const path = require('path');
+const pug = require('pug')
 
 const express = require("express");
 const app = express()
@@ -18,14 +19,15 @@ app.get("/", (req, res) => {
 })
 
 app.get("/tree", (req, res) => {
-	res.render('tree')
+	res.render('tree');
 })
 
 app.get("/editing/:file", (req, res) => {
-
+	res.render('editing', {file: req.params.file});
 })
 
 // Routes
+
 import { router as api_routes } from "./routes/api.routes.js";
 app.use("/api", api_routes);
 

@@ -4,7 +4,7 @@ import sha1 from 'sha1';
 
 /*
 	Define functions to fetch the cells, files 
-	or notebook fromthe local webserver API.		
+	or notebook from the local webserver API.		
 
 	WARNING: For now, the data is stored in a 
 				   very bad model that requires useless
