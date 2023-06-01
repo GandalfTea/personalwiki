@@ -1,57 +1,55 @@
 
 import * from '@core';
-import sha1 from 'sha1';
+const crypto = require('crypto');
 const fs = require('fs');
 
 enum diskret {
 	INVALID_ARGUMENTS,
 	PARENT_NOTEBOOK_NOT_FOUND,
+	OVERWRITE_FROM_SAFE_FUNCTION,
 	FS_ERROR,	
-	SUCCESSFUL
+	SUCCESS,
 }
 
 
 /* 
-Flush a FILE object to disk in JSON format.
+Flush a full FILE to disk in JSON format.
 
 NOTE: If file does not exist, create it. If file does exist, overwrite.
-RETURNS an instance of diskret.                                      */
+@arg cells is a dict of cells with idx as keys.
+*/
 
-function write_file( cells: Cell[], file: string | null, notebook: string | null) : diskret {
+function write_file( cells: Cell[], file: string, notebook: string) : diskret {
 	if(file == null || notebook == null) return diskret.INVALID_ARGUMENTS;
 	if(!fs.existsSync(`../notebook/${notebook.toLowerCase()}`)) return diskret.PARENT_NOTEBOOK_NOT_FOUND;
 
-	const path = `../notebooks/${notebook.toLowerCase()}/${file.toLowerCase().pwf}`;
+	const path = `../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`;
 	const date = new Date();
-	var hashstring = "";
+	var hashstring = crypto.createHash('sha1').update(JSON.stringify(cells)).digest('hex');
 
 	var data = {
-		"metadata" : [
-			"name": file.toLowerCase(),
+		"header" : [
+			"file": file.toLowerCase(),
 			"nb":   notebook.toLowerCase(),
 			"length": cells.length,
-			"format": "json",
+			"hash": hashstring,
 			"last_edit": `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}T${date.toLocaleTimeString()}`,
 		],
-		"cells": []
+		"data": cells
 	};
 
-	for(let i=0; i <= cells.length; i++) {
-		data["cells"][i] = cells[i];
-		hashstring.concat(cells[i].data);
-	}
-
-	data["metadata"]["hash"] = sha1(hashstring); 
-
-	fs.writeFile(path, JSON.stringify(data), err => {
-		if(err) return diskret.FS_ERROR;
-		return diskret.SUCCESSFUL;
-	});
+	const ws = fs.createWriteStream(path);
+	ws.write(JSON.stringify(data));
+	ws.close();
+	return diskret.SUCCESS;
 } 
-
 
 /* 
 Same as above, but does NOT overwrite existing files. */
-
-function write_file_safe( cells: Cell[], file: string | null, notebook: string | null) : diskret {
+function write_file_safe( cells: Cell[], file: string, notebook: string) : diskret {
+	if(fs.existsSync(`../notebook/${notebook.toLowerCase()}/${file.toLowerCase()}`)) return diskret.OVERWRITE_FROM_SAFE_FUNCTION;
+	else return write_file(cells, file, notebook)
 }
+
+// Would this ever be used?
+function write_cell(cell: object, position: number,  file: string, notebook: string) {}

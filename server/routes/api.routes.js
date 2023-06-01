@@ -1,4 +1,5 @@
 
+import {write_file, write_file_safe} from "../fs";
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
@@ -51,6 +52,9 @@ router.get("file/:slug", (req, res) => {
 
 // Post new full array of cells (this happens often because of cell movement) 
 router.post("file/:slug", (req, res) => {
+	let ret = write_file(req.body.cells, req.params.slug, req.body.nb);	
+	res.status(200)
+	res.send(ret)	
 });
 
 // Append cells to the end of file
