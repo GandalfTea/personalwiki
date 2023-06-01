@@ -1,4 +1,4 @@
-compiled/*
+public/compiled/*
 
 # Swap
 [._]*.s[a-v][a-z]
