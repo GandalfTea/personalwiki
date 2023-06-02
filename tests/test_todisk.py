@@ -8,7 +8,7 @@ class TestFlush(unittest.TestCase):
 	
 	def test_file_creation(self):
 		data = {
-			"cells": {
+			"data": {
 							"0" : {
 								"uuid" : "da39a3ee5e6b4b0d3255bfef95601890afd80709",
 								"data" : "demo data for a demo world"

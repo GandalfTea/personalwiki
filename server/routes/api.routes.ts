@@ -1,62 +1,31 @@
 
 import {diskret, write_file, write_file_safe} from "../fs";
+import log from "../logging";
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
 
 
-// Individual Cell
+// INDIVIDUAL FILE 
 
-router.get("file/:slug/cell/:uid", (req, res) => {
-	if(process.env.BACKEND === 1) {
- 		// JSON
-		/*
-      Cache:
-      [ ] Search for file 
-			[ ] Search for cell
-		  [ ] Return Cell
-
-			if cache miss: 
-			[ ] Open Notebook folder
-			[ ] Search and open for file :slug
-      [ ] Search for cell :uid 
-			[ ] Register cache
-      [ ] Return cell                     */
-	} else if (process.env.BACKEND === 2) {
-		// SQL
-
-	} else {
-		// ERROR
-	}
-});
-
-router.post("file/:slug/cell/:uid", (req, res) => {
-});
-
-router.patch("file/:slug/cell/:uid", (req, res) => {
+router.get("/file", (req, res) => {
+	log("GET", req.socket.remoteAddress, 0, 420, "FILE")
 })
 
-router.delete("file/:slug/cell/:uid", (req, res) => {
-})
-
-
-// Individual File
-
-
-router.get("file/:slug/details", (req, res) => {
+router.get("/file/:slug/details", (req, res) => {
 })
 
 // Returns all the cells in the file
-router.get("file/:slug", (req, res) => {
+router.get("/file/:slug", (req, res) => {
 	log("GET", req.socket.remoteAddress, 0, 420, "FILE")
 });
 
 // Post new full array of cells (this happens often because of cell movement) 
-router.post("file/:slug", (req, res) => {
+router.post("/file/:slug", (req, res) => {
 	log("POST", req.socket.remoteAddress, 0, 420, "POST FILE")
-	print("DICKS")
+	console.log(req.body)
 	if(process.env.DEBUG) _start = process.hrtime.bigint();
-	let ret = write_file(req.body.cells, req.params.slug, req.body.nb);	
+	let ret = write_file(req.body.data, req.params.slug, req.body.nb);	
 	switch(ret) {
 		case diskret.SUCCESS: 
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 200, "SUCCESS");
@@ -79,10 +48,10 @@ router.post("file/:slug", (req, res) => {
 });
 
 // Append cells to the end of file
-router.patch("file/:slug", (req, res) => {
+router.patch("/file/:slug", (req, res) => {
 })
 
-router.delete("file/:slug", (req, res) => {
+router.delete("/file/:slug", (req, res) => {
 })
 
 
