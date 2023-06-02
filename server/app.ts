@@ -1,4 +1,5 @@
 
+import log from "./logging";
 const path = require('path');
 const pug = require('pug')
 
@@ -12,13 +13,14 @@ app.use(express.static("./public"))
 
 
 const PORT = 8080; // Same as SPNATI, could cause conflict if you a degen
-const DEBUG = 0;
 
 app.get("/", (req, res) => {
+	log("GET", req.socket.remoteAddress, 0, 200, "Successful")
 	res.redirect('/tree');
 })
 
 app.get("/tree", (req, res) => {
+	log("GET", req.socket.remoteAddress, 0, 200, "Get Tree")
 	res.render('tree');
 })
 
@@ -28,9 +30,8 @@ app.get("/editing/:file", (req, res) => {
 
 // Routes
 
-import { router as api_routes } from "./routes/api.routes.js";
+import { router as api_routes } from "./routes/api.routes";
 app.use("/api", api_routes);
-
 
 app.listen(PORT, () => {
 	process.stdout.write(`\n\nListening on port: ${PORT}.`);

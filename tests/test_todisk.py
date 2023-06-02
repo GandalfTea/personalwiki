@@ -1,6 +1,7 @@
 
 import json
 import unittest
+import requests as rq
 from setup import *
 
 class TestFlush(unittest.TestCase):
@@ -23,4 +24,8 @@ class TestFlush(unittest.TestCase):
 			},
 			"nb": "demonb"
 		}
-		r = rq.post(f"localhost:{PORT}/file/demofile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
+		r = rq.post(f"http://localhost:8080/api/file/demofile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
+		print(r.status_code)
+
+if __name__ == "__main__":
+    unittest.main()
