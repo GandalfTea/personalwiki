@@ -2,10 +2,9 @@
 &nbsp;
 
 #### About
-A personal wiki for relational information ordered in Jupyter Notebook like cells without kernels. It supports Markdown and LaTeX formatting.    
-Two backends are available, `express` stores data in JSON files and `django` stores data in a SQLite database. Express is lighter and faster. Django comes with a lot of overhead. 
+A personal wiki for relational information ordered in Jupyter Notebook like cells without kernels. It supports Markdown and LaTeX formatting. Two backends are available, `express` stores data in JSON files and `django` stores data in a SQLite database. Express is lighter and faster. Django comes with a lot of overhead. 
 
-It is still in development. The code is open source and general support for easy plugins will be added in the future.
+It is still in development. The code is open source and general support for plugins will be added in the future.
 
 &nbsp;
 
@@ -13,11 +12,11 @@ It is still in development. The code is open source and general support for easy
 
 Install dependencies, compile the TS and start webserver:
 ```bash
-$ sh compile.sh    [ localhost:8080 ] 
+sh compile.sh
 ```
 Or just start:
 ```bash
-$ sh start.sh      [ localhost:8080 ] 
+sh start.sh
 ```
 For debugging and logs, update `./server/.env` file:
 ```bash
@@ -25,15 +24,17 @@ PORT=8080
 DEBUG=0
 ```
 
+&nbsp;
+
 #### Testing
 Testing requires `unittest`.
 ```
-$ pip install unittest
+pip install unittest
 ```
 Update API details in `./tests/setup.py` and run the tests:
 ```
-$ python3 ./tests/test_api.py
-$ python3 ./tests/test_todisk.py
+python3 ./tests/test_api.py
+python3 ./tests/test_todisk.py
 ```
 
 &nbsp;
