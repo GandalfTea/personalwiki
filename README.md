@@ -2,24 +2,39 @@
 &nbsp;
 
 #### About
-A personal WIKI for storing notebooks and information. It is inspired by Jupyter Notebook, but works without a kernel, each cell formatting only Markdown and LaTeX. It makes use of React.js with TypeScript for front end cell management, Django and an SQLite database for storing the data in the backend and a REST API, `djangorestframework` to serve data and patch updates.
+A personal wiki for relational information ordered in Jupyter Notebook like cells without kernels. It supports Markdown and LaTeX formatting.    
+Two backends are available, `express` stores data in JSON files and `django` stores data in a SQLite database. Express is lighter and faster. Django comes with a lot of overhead. 
 
-It is still in alpha development. The code is open source and general support for easy plugins will be added in the future.
+It is still in development. The code is open source and general support for easy plugins will be added in the future.
 
 &nbsp;
 
 #### Use
 
+Install dependencies, compile the TS and start webserver:
 ```bash
-$ git clone https://github.com/GandalfTea/personalwiki 
-[ choose which branch you want, the main one is probably stable ]
+$ sh compile.sh    [ localhost:8080 ] 
+```
+Or just start:
+```bash
+$ sh start.sh      [ localhost:8080 ] 
+```
+For debugging and logs, update `./server/.env` file:
+```bash
+PORT=8080
+DEBUG=0
 ```
 
-```bash
-$ cd personalwiki && bash start.sh 	       [ localhost:8080 ]
+#### Testing
+Testing requires `unittest`.
 ```
-This requires `django` and `djangorestframework`, which are automatically
-pip installed by the script in case you don't already have them.
+$ pip install unittest
+```
+Update API details in `./tests/setup.py` and run the tests:
+```
+$ python3 ./tests/test_api.py
+$ python3 ./tests/test_todisk.py
+```
 
 &nbsp;
 
@@ -42,9 +57,3 @@ pip installed by the script in case you don't already have them.
 * [ ] Improved Dark mode color scheme
 * [ ] Add top menu for theme selection, changing file title, etc.
 
-&nbsp;
-
-#### To Research:
-
-* Public/Private key Login
-* Support the creation and testing of plugins
