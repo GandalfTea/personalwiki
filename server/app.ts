@@ -3,14 +3,15 @@ import log from "./logging";
 const path = require('path');
 const pug = require('pug')
 
+const bodyParser = require('body-parser');
 const express = require("express");
 const app = express()
 app.engine('pug', require('pug').__express)
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, '..','/views'))
 
-app.use(express.json())
 app.use(express.static("./public"))
+app.use(bodyParser.json({limit: '50mb'}));
 
 
 const PORT = 8080; // Same as SPNATI, could cause conflict if you a degen

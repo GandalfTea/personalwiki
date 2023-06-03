@@ -1,5 +1,6 @@
 public/compiled/*
 notebooks
+package-lock.json
 
 # Swap
 [._]*.s[a-v][a-z]
