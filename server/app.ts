@@ -11,7 +11,7 @@ app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, '..','/views'))
 
 app.use(express.static("./public"))
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({limit: '1000mb'}));
 
 
 const PORT = 8080; // Same as SPNATI, could cause conflict if you a degen
