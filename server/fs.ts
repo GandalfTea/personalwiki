@@ -46,7 +46,7 @@ export function write_file( cells: Cell[], file: string, notebook: string) : dis
 /* 
 Same as above, but does NOT overwrite existing files. */
 export function write_file_safe( cells: Cell[], file: string, notebook: string) : diskret {
-	if(fs.existsSync(`../notebook/${notebook.toLowerCase()}/${file.toLowerCase()}`)) return diskret.OVERWRITE_FROM_SAFE_FUNCTION;
+	if(fs.existsSync(path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`))) return diskret.OVERWRITE_FROM_SAFE_FUNCTION;
 	else return write_file(cells, file, notebook)
 }
 
