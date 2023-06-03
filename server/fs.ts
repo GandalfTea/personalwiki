@@ -2,8 +2,9 @@
 import * from '@core';
 const crypto = require('crypto');
 const fs = require('fs');
+const path = require('path');
 
-enum diskret {
+export enum diskret {
 	INVALID_ARGUMENTS,
 	PARENT_NOTEBOOK_NOT_FOUND,
 	OVERWRITE_FROM_SAFE_FUNCTION,
@@ -19,11 +20,11 @@ NOTE: If file does not exist, create it. If file does exist, overwrite.
 @arg cells is a dict of cells with idx as keys.
 */
 
-function write_file( cells: Cell[], file: string, notebook: string) : diskret {
+export function write_file( cells: Cell[], file: string, notebook: string) : diskret {
 	if(file == null || notebook == null) return diskret.INVALID_ARGUMENTS;
-	if(!fs.existsSync(`../notebook/${notebook.toLowerCase()}`)) return diskret.PARENT_NOTEBOOK_NOT_FOUND;
+	if(!fs.existsSync(path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}`))) return diskret.PARENT_NOTEBOOK_NOT_FOUND;
 
-	const path = `../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`;
+	const rp = path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`);
 	const date = new Date();
 	var hashstring = crypto.createHash('sha1').update(JSON.stringify(cells)).digest('hex');
 
@@ -38,15 +39,13 @@ function write_file( cells: Cell[], file: string, notebook: string) : diskret {
 		"data": cells
 	};
 
-	const ws = fs.createWriteStream(path);
-	ws.write(JSON.stringify(data));
-	ws.close();
+	fs.writeFileSync(rp, JSON.stringify(data));
 	return diskret.SUCCESS;
 } 
 
 /* 
 Same as above, but does NOT overwrite existing files. */
-function write_file_safe( cells: Cell[], file: string, notebook: string) : diskret {
+export function write_file_safe( cells: Cell[], file: string, notebook: string) : diskret {
 	if(fs.existsSync(`../notebook/${notebook.toLowerCase()}/${file.toLowerCase()}`)) return diskret.OVERWRITE_FROM_SAFE_FUNCTION;
 	else return write_file(cells, file, notebook)
 }

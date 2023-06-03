@@ -1,9 +1,11 @@
 
-import {diskret, write_file, write_file_safe} from "../fs";
+import {diskret, write_file} from "../fs";
 import log from "../logging";
 const express = require("express");
 const router = express.Router();
-require("dotenv").config();
+const dotenv = require('dotenv');
+dotenv.config({ path: '../.env' });
+
 
 
 // INDIVIDUAL FILE 
@@ -22,15 +24,16 @@ router.get("/file/:slug", (req, res) => {
 
 // Post new full array of cells (this happens often because of cell movement) 
 router.post("/file/:slug", (req, res) => {
-	log("POST", req.socket.remoteAddress, 0, 420, "POST FILE")
-	console.log(req.body)
-	if(process.env.DEBUG) _start = process.hrtime.bigint();
+	console.log(process.env.DEBUG)
+	const _start = process.hrtime.bigint();
+	if(process.env.DEBUG >= 2) console.log(req.body);
 	let ret = write_file(req.body.data, req.params.slug, req.body.nb);	
+	console.log(typeof _start)
 	switch(ret) {
 		case diskret.SUCCESS: 
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 200, "SUCCESS");
 			res.status(200);
-			res.send(ret)	
+			res.send("Done")	
 			break;
 		case diskret.INVALID_ARGUMENTS:
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 200, "INVALID_ARGUMENTS");
