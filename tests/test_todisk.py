@@ -25,7 +25,21 @@ class TestFlush(unittest.TestCase):
 			"nb": "demonb"
 		}
 		r = rq.post(f"http://localhost:8080/api/file/demofile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
-		print(r.status_code)
+		self.assertEqual(r.status_code, 201)
+
+	def test_big_file(self):
+		N = 2 << 17
+		data = {
+			"data": {},
+			"nb": "demonb"
+		}
+		for i in range(N):
+			data['data'][str(i)] = {
+				"uuid" : "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+				"data" : "demo data for a demo world"
+			}	
+		r = rq.post(f"http://localhost:8080/api/file/demolargefile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
+		self.assertEqual(r.status_code, 201)
 
 if __name__ == "__main__":
     unittest.main()
