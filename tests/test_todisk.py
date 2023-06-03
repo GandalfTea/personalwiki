@@ -26,9 +26,11 @@ class TestFlush(unittest.TestCase):
 		}
 		r = rq.post(f"http://localhost:8080/api/file/demofile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
 		self.assertEqual(r.status_code, 201)
+		r = rq.delete(f"http://localhost:8080/api/file/demofile", headers={"Content-Type": "application/json"}, data=json.dumps({"nb":"demonb"}))
+		self.assertEqual(r.status_code, 200)
 
 	def test_big_file(self):
-		N = 2 << 17
+		N = 2 << 20
 		data = {
 			"data": {},
 			"nb": "demonb"
@@ -40,6 +42,8 @@ class TestFlush(unittest.TestCase):
 			}	
 		r = rq.post(f"http://localhost:8080/api/file/demolargefile", headers={"Content-Type": "application/json"}, data=json.dumps(data))
 		self.assertEqual(r.status_code, 201)
+		r = rq.delete(f"http://localhost:8080/api/file/demolargefile", headers={"Content-Type": "application/json"}, data=json.dumps({"nb":"demonb"}))
+		self.assertEqual(r.status_code, 200)
 
 if __name__ == "__main__":
     unittest.main()
