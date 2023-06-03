@@ -1,5 +1,5 @@
 
-import {diskret, write_file, write_file_safe} from "../fs";
+import {diskret, write_file, write_file_safe, remove_file} from "../fs";
 import log from "../logging";
 const express = require("express");
 const router = express.Router();
@@ -26,8 +26,8 @@ router.get("/file/:slug", (req, res) => {
 router.post("/file/:slug", (req, res) => {
 	const _start = process.hrtime.bigint();
 	if(process.env.DEBUG >= 2) console.log(req.body);
-	let ret = write_file_safe(req.body.data, req.params.slug, req.body.nb);	
-	switch(ret) {
+	let r = write_file_safe(req.body.data, req.params.slug, req.body.nb);	
+	switch(r) {
 		case diskret.SUCCESS: 
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 201, "SUCCESS. File "+req.params.slug+ " created.");
 			res.status(201);
@@ -53,14 +53,41 @@ router.post("/file/:slug", (req, res) => {
 			res.status(500);
 			res.send("FS_ERROR");	
 			break;
+		default:
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "UNKNOWN_SERVER_ERROR");
+			res.status(500);
+			res.send("UNKNOWN_SERVER_ERROR");
 	}
 });
 
 // Append cells to the end of file
 router.patch("/file/:slug", (req, res) => {
+	
 })
 
 router.delete("/file/:slug", (req, res) => {
+	const _start = process.hrtime.bigint();
+	let r = remove_file(req.params.slug, req.body.nb);
+	switch(r) {
+		case diskret.SUCCESS:
+			log("DELETE", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 200, "SUCCESS. File "+req.params.slug+ " deleted.");
+			res.status(200);
+			res.send("DELETED");
+			break;
+		case diskret.FILE_NOT_FOUND:
+			log("DELETE", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 404, "FILE_NOT_FOUND");
+			res.status(404);
+			res.send("FILE_NOT_FOUND");
+			break;
+		case diskret.FS_ERROR:
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "FS_ERROR");
+			res.status(500);
+			res.send("FS_ERROR");
+		default:
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "UNKNOWN_SERVER_ERROR");
+			res.status(500);
+			res.send("UNKNOWN_SERVER_ERROR");
+	}
 })
 
 

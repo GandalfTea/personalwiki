@@ -7,6 +7,7 @@ const path = require('path');
 export enum diskret {
 	INVALID_ARGUMENTS,
 	PARENT_NOTEBOOK_NOT_FOUND,
+	FILE_NOT_FOUND,
 	OVERWRITE_FROM_SAFE_FUNCTION,
 	FS_ERROR,	
 	SUCCESS,
@@ -48,6 +49,17 @@ Same as above, but does NOT overwrite existing files. */
 export function write_file_safe( cells: Cell[], file: string, notebook: string) : diskret {
 	if(fs.existsSync(path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`))) return diskret.OVERWRITE_FROM_SAFE_FUNCTION;
 	else return write_file(cells, file, notebook)
+}
+
+export function remove_file(file: string, notebook: string) : diskret {
+	const rp = path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}/${file.toLowerCase()}`);
+	if(fs.existsSync(rp)) {
+		fs.unlinkSync(rp);
+		if(fs.existsSync(rp)) return diskret.FS_ERROR;
+		return diskret.SUCCESS;
+	} else {
+		return diskret.FILE_NOT_FOUND;
+	}
 }
 
 // Would this ever be used?
