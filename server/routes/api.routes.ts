@@ -1,5 +1,5 @@
 
-import {diskret, write_file, write_file_safe, remove_file} from "../fs";
+import {diskret, write_file, write_file_safe, remove_file, create_nb} from "../fs";
 import log from "../logging";
 const express = require("express");
 const router = express.Router();
@@ -83,6 +83,7 @@ router.delete("/file/:slug", (req, res) => {
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "FS_ERROR");
 			res.status(500);
 			res.send("FS_ERROR");
+			break;
 		default:
 			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "UNKNOWN_SERVER_ERROR");
 			res.status(500);
@@ -94,7 +95,30 @@ router.delete("/file/:slug", (req, res) => {
 
 // Individual Notebook
 
-router.get("nb/:slug/details", (req, res) => {
+router.post("/nb/:slug", (req, res) => {
+	const _start = process.hrtime.bigint();
+	let r = create_nb(req.params.slug);
+	switch(r) {
+		case diskret.SUCCESS: {
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 200, "NOTEBOOK " + req.params.slug + " created.");
+			res.status(200);
+			res.status("CREATED");
+			break;
+		}
+		case diskret.NOTEBOOK_ALREADY_EXISTS: {
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 403, "NOTEBOOK " + req.params.slug + " already exists.");
+			res.status(403);
+			res.status("NOTEBOOK_ALREADY_EXISTS");
+			break;
+		}
+		default: {
+			log("POST", req.socket.remoteAddress, Number(process.hrtime.bigint() - _start), 500, "UNKNOWN_SERVER_ERROR");
+			res.status(500);
+			res.send("UNKNOWN_SERVER_ERROR");
+		}
+	}
+}))
+	}
 })
 
 // Get all files in notebook

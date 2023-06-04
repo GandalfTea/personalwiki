@@ -8,6 +8,7 @@ export enum diskret {
 	INVALID_ARGUMENTS,
 	PARENT_NOTEBOOK_NOT_FOUND,
 	FILE_NOT_FOUND,
+	NOTEBOOK_ALREADY_EXISTS,
 	OVERWRITE_FROM_SAFE_FUNCTION,
 	FS_ERROR,	
 	SUCCESS,
@@ -62,5 +63,16 @@ export function remove_file(file: string, notebook: string) : diskret {
 	}
 }
 
-// Would this ever be used?
-function write_cell(cell: object, position: number,  file: string, notebook: string) {}
+
+export function create_nb(notebook: string): diskret {
+	const rp = path.resolve(__dirname, `../../notebooks/${notebook.toLowerCase()}`);
+	if(fs.existsSync(rp)) {
+		return diskret.NOTEBOOK_ALREADY_EXISTS;
+	} else {
+		fs.mkdirSync(rp);
+		if(fs.existsSync(rp)) {
+			return diskret.SUCCESS;
+		}
+	}
+}
+
